@@ -141,19 +141,19 @@ Spec: §3. Work directly on `main` for this milestone (there's no GitHub remote 
 
 **Concepts:** flat config, `typescript-eslint`, `angular-eslint`, `eslint-config-prettier` (spec §3).
 
-- [ ] Root: `npm install -D eslint @eslint/js typescript-eslint angular-eslint eslint-config-prettier`.
-- [ ] Write `eslint.config.js` as an array of config objects:
+- [x] Root: `npm install -D eslint @eslint/js typescript-eslint angular-eslint eslint-config-prettier`.
+- [x] Write `eslint.config.js` as an array of config objects:
   1. global ignores: `**/dist`, `**/.angular`, `**/coverage`
   2. JS recommended + typescript-eslint recommended for all `**/*.ts`
   3. angular-eslint's TypeScript configs for `client/**/*.ts` and its template configs for
      `client/**/*.html` (angular-eslint's README has a flat-config example — adapt its `files` patterns to
      `client/...`)
   4. `eslint-config-prettier` **last**
-- [ ] Root scripts: `lint` → `eslint .`.
-- [ ] **Verify:** `npm run lint` → no errors. Then add an unused variable in `app.ts` → `npm run lint`
+- [x] Root scripts: `lint` → `eslint .`.
+- [x] **Verify:** `npm run lint` → no errors. Then add an unused variable in `app.ts` → `npm run lint`
       reports it → remove it.
-- [ ] **Check yourself:** What would go wrong if `eslint-config-prettier` were first in the array?
-- [ ] Commit: `chore: add eslint for client and server`
+- [x] **Check yourself:** What would go wrong if `eslint-config-prettier` were first in the array?
+- [x] Commit: `chore: add eslint for client and server`
 
 ---
 

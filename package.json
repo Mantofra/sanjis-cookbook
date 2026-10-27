@@ -17,7 +17,8 @@
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "dev": "concurrently \"npm run dev -w server\" \"npm start -w client\""
+    "dev": "concurrently \"npm run dev -w server\" \"npm start -w client\"",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -26,13 +27,18 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/Mantofra/sanjis-cookbook/issues"
   },
   "homepage": "https://github.com/Mantofra/sanjis-cookbook#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "^22.6.0",
     "concurrently": "^10.0.6",
-    "prettier": "^3.9.10"
+    "eslint": "^10.13.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.10",
+    "typescript-eslint": "^8.72.1"
   }
 }
