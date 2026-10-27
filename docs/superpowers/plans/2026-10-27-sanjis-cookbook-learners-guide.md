@@ -95,22 +95,22 @@ Spec: §3. Work directly on `main` for this milestone (there's no GitHub remote 
 **Concepts:** ESM in Node, `tsconfig.json` basics (`target`, `module`, `outDir`, `rootDir`, `strict`),
 `tsx watch`.
 
-- [ ] `server/package.json`: `"name": "server"`, `"private": true`, `"type": "module"`.
-- [ ] From the root: `npm install express -w server` and `npm install -D typescript tsx @types/node @types/express -w server`.
+- [x] `server/package.json`: `"name": "server"`, `"private": true`, `"type": "module"`.
+- [x] From the root: `npm install express -w server` and `npm install -D typescript tsx @types/node @types/express -w server`.
       (`-w server` = "install into the server workspace".)
-- [ ] `tsconfig.json`: `strict: true`, `module` and `moduleResolution` `nodenext`, `target` a recent ES
+- [x] `tsconfig.json`: `strict: true`, `module` and `moduleResolution` `nodenext`, `target` a recent ES
       version, `rootDir: "src"`, `outDir: "dist"`. Read what each option does in the TypeScript docs.
-- [ ] `app.ts`: `createApp()` creates the Express app, adds `express.json({ limit: '100kb' })`, and the
+- [x] `app.ts`: `createApp()` creates the Express app, adds `express.json({ limit: '100kb' })`, and the
       health route. Returns the app.
-- [ ] `server.ts`: reads `PORT` from `process.env` (default 3000), calls `createApp().listen(...)`, logs the URL.
-- [ ] Scripts in `server/package.json`: `dev` → `tsx watch src/server.ts`, `build` → `tsc`,
+- [x] `server.ts`: reads `PORT` from `process.env` (default 3000), calls `createApp().listen(...)`, logs the URL.
+- [x] Scripts in `server/package.json`: `dev` → `tsx watch src/server.ts`, `build` → `tsc`,
       `start` → `node dist/server.js`.
-- [ ] **Verify:** `npm run dev -w server`, then in another terminal `curl localhost:3000/api/health` →
+- [x] **Verify:** `npm run dev -w server`, then in another terminal `curl localhost:3000/api/health` →
       `{"ok":true}`. Change the response, save, and see tsx restart.
-- [ ] **Verify:** `npm run build -w server` creates `server/dist/server.js`; `npm start -w server` runs it.
-- [ ] **Check yourself:** Why does `server.ts` import `'./app.js'` when the file is `app.ts`? Why
+- [x] **Verify:** `npm run build -w server` creates `server/dist/server.js`; `npm start -w server` runs it.
+- [x] **Check yourself:** Why does `server.ts` import `'./app.js'` when the file is `app.ts`? Why
       separate `createApp` from `listen` (spec §3)?
-- [ ] Commit: `feat(server): add express skeleton with health endpoint`
+- [x] Commit: `feat(server): add express skeleton with health endpoint`
 
 ### Task 0.3: Angular client and the dev proxy
 
