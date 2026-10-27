@@ -102,8 +102,9 @@ sanjis-cookbook/
 ### Why split `app.ts` and `server.ts`?
 
 Tests need the configured Express app but must **not** open a real port or connect to the real database.
-`app.ts` exports the app; `server.ts` is the only file that connects to MongoDB and listens. Tests import
-`app.ts` and drive it with supertest (see §8).
+`app.ts` exports a `createApp()` function; `server.ts` is the only file that connects to MongoDB and
+listens. Tests call `createApp()` and drive the result with supertest (see §8). It's a function rather than
+a single exported `app` so each test file gets a fresh app — e.g. with its own empty rate-limit counters.
 
 ### Why feature folders (`modules/auth`, `modules/recipes`)?
 
@@ -626,7 +627,8 @@ The server must listen on `process.env.PORT` — Render chooses the port.
 
 1. Push the repo to GitHub.
 2. New → **Web Service** → connect the GitHub repo. Runtime: Node.
-   - Build command: `npm ci && npm run build`
+   - Build command: `npm ci --include=dev && npm run build` — because `NODE_ENV=production` is set,
+     a plain `npm ci` would skip devDependencies, and the build needs them (TypeScript, Angular CLI)
    - Start command: `npm start`
    - Instance type: Free
 3. Environment variables: `NODE_ENV=production`, `MONGODB_URI=<prod string>`, `JWT_SECRET=<new random>`.
