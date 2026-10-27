@@ -16,7 +16,8 @@
   },
   "scripts": {
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "dev": "concurrently \"npm run dev -w server\" \"npm start -w client\""
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
   },
   "homepage": "https://github.com/Mantofra/sanjis-cookbook#readme",
   "devDependencies": {
+    "concurrently": "^10.0.6",
     "prettier": "^3.9.10"
   }
 }

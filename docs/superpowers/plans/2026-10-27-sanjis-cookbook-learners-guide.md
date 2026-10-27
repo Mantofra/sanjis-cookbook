@@ -119,21 +119,21 @@ Spec: §3. Work directly on `main` for this milestone (there's no GitHub remote 
 
 **Concepts:** Angular CLI, dev-server proxy (spec §9 "Local development"), `concurrently`.
 
-- [ ] From the root: `npx @angular/cli@latest new client --style=scss --ssr=false --skip-git --skip-install`.
+- [x] From the root: `npx @angular/cli@latest new client --style=scss --ssr=false --skip-git --skip-install`.
       (`--skip-git`: we already have a repo. `--skip-install`: the root workspace installs everything.)
-- [ ] Then `npm install` at the root. Delete `client/package-lock.json` if one was created — only the
+- [x] Then `npm install` at the root. Delete `client/package-lock.json` if one was created — only the
       root lock file should exist.
-- [ ] `proxy.conf.json`: forward `/api` to `http://localhost:3000`. Wire it in `angular.json` under the
+- [x] `proxy.conf.json`: forward `/api` to `http://localhost:3000`. Wire it in `angular.json` under the
       `serve` target's options (`proxyConfig`). Look it up in the Angular docs ("Proxying to a backend server").
-- [ ] Temporary check: make the root `App` component call `GET /api/health` with `HttpClient`
+- [x] Temporary check: make the root `App` component call `GET /api/health` with `HttpClient`
       (`provideHttpClient()` in `app.config.ts`) and display "API ok" or "API down". You'll delete this later.
-- [ ] Root: `npm install -D concurrently`. Root script `dev` → runs `npm run dev -w server` and
+- [x] Root: `npm install -D concurrently`. Root script `dev` → runs `npm run dev -w server` and
       `npm start -w client` together via `concurrently`.
-- [ ] **Verify:** `npm run dev`, open `http://localhost:4200` → "API ok". Stop the server half → reload →
+- [x] **Verify:** `npm run dev`, open `http://localhost:4200` → "API ok". Stop the server half → reload →
       "API down".
-- [ ] **Check yourself:** In the browser's Network tab, which host/port did the `/api/health` request go
+- [x] **Check yourself:** In the browser's Network tab, which host/port did the `/api/health` request go
       to? Why does that matter for cookies later?
-- [ ] Commit: `feat(client): add angular app with dev proxy`
+- [x] Commit: `feat(client): add angular app with dev proxy`
 
 ### Task 0.4: ESLint for the whole repo
 
