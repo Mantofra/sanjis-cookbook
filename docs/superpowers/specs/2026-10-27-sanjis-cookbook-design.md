@@ -113,13 +113,13 @@ the model, routes and logic side by side, instead of hunting through `models/`, 
 
 Inside a module, each file has one job:
 
-| File | Job |
-|---|---|
-| `*.routes.ts` | maps URL + HTTP method → middleware + controller function |
-| `*.controller.ts` | reads `req`, calls the service, writes `res`. No database code here. |
-| `*.service.ts` | the actual logic and database queries. Knows nothing about `req`/`res`. |
-| `*.schemas.ts` | zod schemas describing valid request bodies (see below) |
-| `*.model.ts` | the Mongoose schema and model |
+| File              | Job                                                                     |
+| ----------------- | ----------------------------------------------------------------------- |
+| `*.routes.ts`     | maps URL + HTTP method → middleware + controller function               |
+| `*.controller.ts` | reads `req`, calls the service, writes `res`. No database code here.    |
+| `*.service.ts`    | the actual logic and database queries. Knows nothing about `req`/`res`. |
+| `*.schemas.ts`    | zod schemas describing valid request bodies (see below)                 |
+| `*.model.ts`      | the Mongoose schema and model                                           |
 
 Keeping services free of `req`/`res` makes them easy to reason about and test.
 
@@ -196,7 +196,13 @@ anything. zod checks it while the program runs:
 const createRecipeSchema = z.object({
   title: z.string().trim().min(1).max(120),
   servings: z.number().int().min(1),
-  ingredients: z.array(z.object({ quantity: z.number().positive().optional(), unit: z.string().optional(), name: z.string().min(1) })),
+  ingredients: z.array(
+    z.object({
+      quantity: z.number().positive().optional(),
+      unit: z.string().optional(),
+      name: z.string().min(1),
+    }),
+  ),
   steps: z.array(z.string().min(1)),
 });
 
@@ -273,20 +279,20 @@ Recipe
 All paths start with `/api`. Request and response bodies are JSON. Every route except register and login
 requires the auth cookie (§6).
 
-| Method & path | Allowed | Success | Purpose |
-|---|---|---|---|
-| `POST /auth/register` `{ email, password, displayName }` | anyone | 201 + user | create account and log in |
-| `POST /auth/login` `{ email, password }` | anyone | 200 + user | check password, set cookie |
-| `POST /auth/logout` | logged in | 204 | clear cookie |
-| `GET /auth/me` | logged in | 200 + user | who am I? |
-| `GET /recipes?scope=mine` (default) | logged in | 200 + list | my recipes |
-| `GET /recipes?scope=shared` | logged in | 200 + list | recipes shared with me |
-| `GET /recipes/:id` | owner or shared-with | 200 + recipe | read one |
-| `POST /recipes` | logged in | 201 + recipe | create; owner = me |
-| `PATCH /recipes/:id` | owner | 200 + recipe | update some fields |
-| `DELETE /recipes/:id` | owner | 204 | delete |
-| `POST /recipes/:id/shares` `{ email }` | owner | 200 + recipe | share with a registered user |
-| `DELETE /recipes/:id/shares/:userId` | owner | 200 + recipe | stop sharing |
+| Method & path                                            | Allowed              | Success      | Purpose                      |
+| -------------------------------------------------------- | -------------------- | ------------ | ---------------------------- |
+| `POST /auth/register` `{ email, password, displayName }` | anyone               | 201 + user   | create account and log in    |
+| `POST /auth/login` `{ email, password }`                 | anyone               | 200 + user   | check password, set cookie   |
+| `POST /auth/logout`                                      | logged in            | 204          | clear cookie                 |
+| `GET /auth/me`                                           | logged in            | 200 + user   | who am I?                    |
+| `GET /recipes?scope=mine` (default)                      | logged in            | 200 + list   | my recipes                   |
+| `GET /recipes?scope=shared`                              | logged in            | 200 + list   | recipes shared with me       |
+| `GET /recipes/:id`                                       | owner or shared-with | 200 + recipe | read one                     |
+| `POST /recipes`                                          | logged in            | 201 + recipe | create; owner = me           |
+| `PATCH /recipes/:id`                                     | owner                | 200 + recipe | update some fields           |
+| `DELETE /recipes/:id`                                    | owner                | 204          | delete                       |
+| `POST /recipes/:id/shares` `{ email }`                   | owner                | 200 + recipe | share with a registered user |
+| `DELETE /recipes/:id/shares/:userId`                     | owner                | 200 + recipe | stop sharing                 |
 
 A recipe in a response includes an `isOwner: boolean` (computed by the server for the current user) so the
 client knows whether to show Edit/Delete/Share buttons. List responses include the owner's `displayName` so
@@ -305,6 +311,7 @@ client knows whether to show Edit/Delete/Share buttons. List responses include t
 
    If nothing matches → **404**. This makes it impossible to forget the check, because there is no
    "load first, check later" step to forget.
+
 3. **"Not allowed" and "doesn't exist" both answer 404**, so nobody can probe which recipe ids exist.
 4. **The UI hiding buttons is not security.** Anyone can call the API with curl. The server is the only
    real gatekeeper.
@@ -398,15 +405,15 @@ server-side session store or a token deny-list; we don't need that.
 
 ### Routes
 
-| Route | Page | Guard |
-|---|---|---|
-| `/login`, `/register` | auth forms | — |
-| `/recipes` | list with tabs _My recipes_ / _Shared with me_ (`?scope=` in the URL) | authGuard |
-| `/recipes/new` | create form | authGuard |
-| `/recipes/:id` | detail + servings control | authGuard |
-| `/recipes/:id/edit` | edit form (only reachable via button shown to owner) | authGuard |
-| `''` | redirect to `/recipes` | |
-| `**` | "not found" page | |
+| Route                 | Page                                                                  | Guard     |
+| --------------------- | --------------------------------------------------------------------- | --------- |
+| `/login`, `/register` | auth forms                                                            | —         |
+| `/recipes`            | list with tabs _My recipes_ / _Shared with me_ (`?scope=` in the URL) | authGuard |
+| `/recipes/new`        | create form                                                           | authGuard |
+| `/recipes/:id`        | detail + servings control                                             | authGuard |
+| `/recipes/:id/edit`   | edit form (only reachable via button shown to owner)                  | authGuard |
+| `''`                  | redirect to `/recipes`                                                |           |
+| `**`                  | "not found" page                                                      |           |
 
 ### Structure (`client/src/app/`)
 
@@ -489,14 +496,14 @@ the error-handling middleware, so no `try/catch` boilerplate is needed in routes
 One **error-handling middleware** (the one with four parameters, `(err, req, res, next)`, registered last)
 turns any error into `{ "error": { "message": "...", "details": ... } }`:
 
-| Cause | Status |
-|---|---|
-| zod validation failure (from `validate` middleware) | 400, `details` = field → messages |
-| `AppError` | its status |
-| Mongoose `CastError` (e.g. `/recipes/abc` — not a valid ObjectId) | 404 |
-| MongoDB duplicate key, `err.code === 11000` | 409 |
-| JSON body that can't be parsed | 400 |
-| anything else | 500, message "Something went wrong"; full error logged with `console.error` |
+| Cause                                                             | Status                                                                      |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| zod validation failure (from `validate` middleware)               | 400, `details` = field → messages                                           |
+| `AppError`                                                        | its status                                                                  |
+| Mongoose `CastError` (e.g. `/recipes/abc` — not a valid ObjectId) | 404                                                                         |
+| MongoDB duplicate key, `err.code === 11000`                       | 409                                                                         |
+| JSON body that can't be parsed                                    | 400                                                                         |
+| anything else                                                     | 500, message "Something went wrong"; full error logged with `console.error` |
 
 Never send stack traces or internal messages to the client in production.
 
@@ -551,11 +558,11 @@ two for components if you want to learn component testing.
 
 ## 9. Environments and deployment
 
-| | Runs on | Database | Secrets from |
-|---|---|---|---|
-| development | your laptop | Atlas, database `sanjis-dev` | `server/.env` (git-ignored) |
-| test | laptop + GitHub Actions | mongodb-memory-server | test setup code |
-| production | Render | Atlas, database `sanjis-prod` | Render environment settings |
+|             | Runs on                 | Database                      | Secrets from                |
+| ----------- | ----------------------- | ----------------------------- | --------------------------- |
+| development | your laptop             | Atlas, database `sanjis-dev`  | `server/.env` (git-ignored) |
+| test        | laptop + GitHub Actions | mongodb-memory-server         | test setup code             |
+| production  | Render                  | Atlas, database `sanjis-prod` | Render environment settings |
 
 ### The services
 
@@ -647,15 +654,15 @@ CI and your laptop all use the same Node.
 Deploy a tiny app first, then grow it. Each milestone ends with: tests and lint green, merged to `main`,
 deployed.
 
-| # | Milestone | Build | Learn |
-|---|---|---|---|
-| 0 | **Setup** | git repo, root `package.json` with workspaces, Prettier + ESLint config, `ng new` client, Express + TypeScript server with `GET /api/health` → `{ ok: true }`, `npm run dev` with the proxy, `.env.example` | how the monorepo and tooling fit together |
-| 1 | **Walking skeleton, deployed** | production build, Express serving Angular + SPA fallback, `config.ts`, Mongoose connection, Atlas, Render, GitHub Actions CI, first test (health endpoint with supertest) | deployment, environment variables, CI |
-| 2 | **Auth** | User model, register/login/logout/me, `requireAuth`, `validate`, error handler, helmet, rate limiting, auth tests; login/register pages, `AuthService`, guard, interceptor, app initializer | hashing, JWT, cookies, middleware, protected routes |
-| 3 | **Recipes (owner only)** | Recipe model, list(mine)/get/create/update/delete, access-rule tests; list, detail and form pages | data modeling, validation, permission-in-query, `FormArray` |
-| 4 | **Servings scaling** | `scaling.ts` + `QuantityPipe` with unit tests; servings control on the detail page | signals, `computed`, pure functions, client testing |
-| 5 | **Sharing** | share/unshare endpoints, `scope=shared`, `isOwner`, sharing tests; share panel, "Shared with me" tab, read-only detail view | multi-user relationships, read-only permissions |
-| 6 | **Polish** | husky + lint-staged, loading/empty/error states, README | team-style workflow |
+| #   | Milestone                      | Build                                                                                                                                                                                                       | Learn                                                       |
+| --- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| 0   | **Setup**                      | git repo, root `package.json` with workspaces, Prettier + ESLint config, `ng new` client, Express + TypeScript server with `GET /api/health` → `{ ok: true }`, `npm run dev` with the proxy, `.env.example` | how the monorepo and tooling fit together                   |
+| 1   | **Walking skeleton, deployed** | production build, Express serving Angular + SPA fallback, `config.ts`, Mongoose connection, Atlas, Render, GitHub Actions CI, first test (health endpoint with supertest)                                   | deployment, environment variables, CI                       |
+| 2   | **Auth**                       | User model, register/login/logout/me, `requireAuth`, `validate`, error handler, helmet, rate limiting, auth tests; login/register pages, `AuthService`, guard, interceptor, app initializer                 | hashing, JWT, cookies, middleware, protected routes         |
+| 3   | **Recipes (owner only)**       | Recipe model, list(mine)/get/create/update/delete, access-rule tests; list, detail and form pages                                                                                                           | data modeling, validation, permission-in-query, `FormArray` |
+| 4   | **Servings scaling**           | `scaling.ts` + `QuantityPipe` with unit tests; servings control on the detail page                                                                                                                          | signals, `computed`, pure functions, client testing         |
+| 5   | **Sharing**                    | share/unshare endpoints, `scope=shared`, `isOwner`, sharing tests; share panel, "Shared with me" tab, read-only detail view                                                                                 | multi-user relationships, read-only permissions             |
+| 6   | **Polish**                     | husky + lint-staged, loading/empty/error states, README                                                                                                                                                     | team-style workflow                                         |
 
 A **walking skeleton** is the thinnest version of the app that goes through every layer
 (Angular → Express → MongoDB → hosting) and is actually deployed. From then on, every feature lands in
@@ -672,20 +679,20 @@ something that already works end to end.
 
 ## 11. Library summary
 
-| Package | Where | What it's for |
-|---|---|---|
-| `express` (v5) | server | HTTP server and routing |
-| `mongoose` | server | MongoDB models and queries |
-| `zod` | server | validate request bodies and env vars at runtime |
-| `argon2` | server | hash and verify passwords |
-| `jsonwebtoken` | server | create and verify login tokens |
-| `cookie-parser` | server | read cookies into `req.cookies` |
-| `helmet` | server | security response headers |
-| `express-rate-limit` | server | limit login/register attempts |
-| `typescript`, `tsx`, `@types/*` | server (dev) | compile / run TypeScript |
-| `vitest`, `supertest`, `mongodb-memory-server` | server (dev) | testing |
-| `@angular/*` | client | the frontend |
-| `prettier` | root (dev) | formatting |
-| `eslint`, `typescript-eslint`, `angular-eslint`, `eslint-config-prettier` | root/client (dev) | linting |
-| `concurrently` | root (dev) | run client + server with one command |
-| `husky`, `lint-staged` | root (dev) | pre-commit checks (milestone 6) |
+| Package                                                                   | Where             | What it's for                                   |
+| ------------------------------------------------------------------------- | ----------------- | ----------------------------------------------- |
+| `express` (v5)                                                            | server            | HTTP server and routing                         |
+| `mongoose`                                                                | server            | MongoDB models and queries                      |
+| `zod`                                                                     | server            | validate request bodies and env vars at runtime |
+| `argon2`                                                                  | server            | hash and verify passwords                       |
+| `jsonwebtoken`                                                            | server            | create and verify login tokens                  |
+| `cookie-parser`                                                           | server            | read cookies into `req.cookies`                 |
+| `helmet`                                                                  | server            | security response headers                       |
+| `express-rate-limit`                                                      | server            | limit login/register attempts                   |
+| `typescript`, `tsx`, `@types/*`                                           | server (dev)      | compile / run TypeScript                        |
+| `vitest`, `supertest`, `mongodb-memory-server`                            | server (dev)      | testing                                         |
+| `@angular/*`                                                              | client            | the frontend                                    |
+| `prettier`                                                                | root (dev)        | formatting                                      |
+| `eslint`, `typescript-eslint`, `angular-eslint`, `eslint-config-prettier` | root/client (dev) | linting                                         |
+| `concurrently`                                                            | root (dev)        | run client + server with one command            |
+| `husky`, `lint-staged`                                                    | root (dev)        | pre-commit checks (milestone 6)                 |

@@ -1,0 +1,36 @@
+{
+  "name": "sanjis-cookbook",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "engines": {
+    "node": ">=26"
+  },
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mantofra/sanjis-cookbook.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Mantofra/sanjis-cookbook/issues"
+  },
+  "homepage": "https://github.com/Mantofra/sanjis-cookbook#readme",
+  "devDependencies": {
+    "prettier": "^3.9.10"
+  }
+}
