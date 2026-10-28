@@ -183,19 +183,19 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 **Concepts:** environment variables, `node --env-file`, zod for config (spec §3), Atlas (spec §9).
 
-- [ ] **Atlas setup** — follow spec §9 "One-time setup → Atlas" steps 1–4. Save both connection
+- [x] **Atlas setup** — follow spec §9 "One-time setup → Atlas" steps 1–4. Save both connection
       strings in a password manager.
-- [ ] `npm install zod mongoose -w server`.
-- [ ] `config.ts`: a zod schema for `process.env` (`NODE_ENV` default `'development'`, `PORT` coerced to a
+- [x] `npm install zod mongoose -w server`.
+- [x] `config.ts`: a zod schema for `process.env` (`NODE_ENV` default `'development'`, `PORT` coerced to a
       number with default 3000, `MONGODB_URI` and `JWT_SECRET` required non-empty strings). Parse once; if it
       fails, print which variables are missing and exit the process with code 1.
-- [ ] `.env` with your dev string (`…/sanjis-dev`) and a random `JWT_SECRET` (spec §6 shows how to generate
+- [x] `.env` with your dev string (`…/sanjis-dev`) and a random `JWT_SECRET` (spec §6 shows how to generate
       one). `.env.example` with the same keys and fake values.
-- [ ] `server.ts`: `await mongoose.connect(config.mongodbUri)`, then listen. Log "Connected to MongoDB".
-- [ ] Server `dev` script → `tsx watch --env-file=.env src/server.ts`.
-- [ ] **Verify:** `npm run dev` logs the connection. Rename `JWT_SECRET` in `.env` → server refuses to
+- [x] `server.ts`: `await mongoose.connect(config.mongodbUri)`, then listen. Log "Connected to MongoDB".
+- [x] Server `dev` script → `tsx watch --env-file=.env src/server.ts`.
+- [x] **Verify:** `npm run dev` logs the connection. Rename `JWT_SECRET` in `.env` → server refuses to
       start with a clear message. Restore it. `git status` must **not** show `.env`.
-- [ ] Commit: `feat(server): add validated config and mongodb connection`
+- [x] Commit: `feat(server): add validated config and mongodb connection`
 
 ### Task 1.3: Production build — Express serves Angular
 
