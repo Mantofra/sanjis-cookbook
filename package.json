@@ -18,7 +18,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "dev": "concurrently \"npm run dev -w server\" \"npm start -w client\"",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "npm test --workspace --if-present"
   },
   "repository": {
     "type": "git",

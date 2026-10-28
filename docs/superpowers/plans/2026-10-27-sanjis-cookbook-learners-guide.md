@@ -166,14 +166,14 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 **Files:** create `server/vitest.config.ts`, `server/tests/health.test.ts`; modify `server/package.json`, root `package.json`
 
-- [ ] `npm install -D vitest supertest @types/supertest -w server`.
-- [ ] `vitest.config.ts`: test files in `tests/**/*.test.ts`; add `test.env` with `NODE_ENV: 'test'`,
+- [x] `npm install -D vitest supertest @types/supertest -w server`.
+- [x] `vitest.config.ts`: test files in `tests/**/*.test.ts`; add `test.env` with `NODE_ENV: 'test'`,
       `JWT_SECRET: 'test-secret'`, `MONGODB_URI: 'mongodb://unused'` (task 1.2's `config.ts` needs these).
-- [ ] Scripts: server `test` → `vitest run`; root `test` → `npm test --workspaces --if-present`.
-- [ ] Test `health.test.ts`:
+- [x] Scripts: server `test` → `vitest run`; root `test` → `npm test --workspaces --if-present`.
+- [x] Test `health.test.ts`:
   - `GET /api/health` returns 200 with body `{ ok: true }`
-- [ ] **Verify:** break the route on purpose → test fails; restore → `npm test` passes.
-- [ ] Commit: `test(server): add vitest and health test`
+- [x] **Verify:** break the route on purpose → test fails; restore → `npm test` passes.
+- [x] Commit: `test(server): add vitest and health test`
 
 ### Task 1.2: Config and MongoDB Atlas connection
 
