@@ -14,7 +14,9 @@
     "format:check": "prettier --check .",
     "dev": "concurrently \"npm run dev -w server\" \"npm start -w client\"",
     "lint": "eslint .",
-    "test": "npm test --workspaces --if-present"
+    "test": "npm test --workspaces --if-present",
+    "build": "npm run build -w client && npm run build -w server",
+    "start": "npm start -w server"
   },
   "repository": {
     "type": "git",
