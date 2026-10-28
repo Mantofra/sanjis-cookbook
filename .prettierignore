@@ -1,4 +1,4 @@
 dist
 coverage
-angular
-package.lock.json
+.angular
+package-lock.json

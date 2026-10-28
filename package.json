@@ -1,11 +1,6 @@
 {
   "name": "sanjis-cookbook",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "private": true,
   "workspaces": [
     "client",
@@ -19,7 +14,7 @@
     "format:check": "prettier --check .",
     "dev": "concurrently \"npm run dev -w server\" \"npm start -w client\"",
     "lint": "eslint .",
-    "test": "npm test --workspace --if-present"
+    "test": "npm test --workspaces --if-present"
   },
   "repository": {
     "type": "git",
