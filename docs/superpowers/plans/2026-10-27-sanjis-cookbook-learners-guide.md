@@ -203,22 +203,22 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 **Concepts:** `express.static`, SPA fallback, `trust proxy` (spec §9 — read the two boxed explanations).
 
-- [ ] Root scripts: `build` → build client then server (`npm run build -w client && npm run build -w server`);
+- [x] Root scripts: `build` → build client then server (`npm run build -w client && npm run build -w server`);
       `start` → `npm start -w server`.
-- [ ] In `createApp()`, **only when `config.isProd`**:
+- [x] In `createApp()`, **only when `config.isProd`**:
   - `app.set('trust proxy', 1)`
   - `express.static` on the Angular output folder — `client/dist/client/browser`. Build the path from
     `import.meta.dirname` (the folder of the current file) going up to the repo root. It works from both
     `src/` and `dist/` because both are one level inside `server/`.
   - a fallback for `GET` requests not starting with `/api` → `res.sendFile(index.html)`. Express 5 needs
     the named-wildcard syntax (`'/{*splat}'`) — see the Express 5 migration guide.
-- [ ] Remove the temporary "API ok" check from the Angular `App` component; leave a simple title.
-- [ ] **Verify:** `npm run build`, then run the compiled server the way production would, loading your
+- [x] Remove the temporary "API ok" check from the Angular `App` component; leave a simple title.
+- [x] **Verify:** `npm run build`, then run the compiled server the way production would, loading your
       local `.env`: `cd server && NODE_ENV=production node --env-file=.env dist/server.js` → open
       `http://localhost:3000` → Angular app. Open `http://localhost:3000/some/deep/path` → still the app,
       not a 404. `/api/health` still returns JSON.
-- [ ] **Check yourself:** Why must the `/api` routes be registered _before_ the fallback?
-- [ ] Commit: `feat: serve angular build from express in production`
+- [x] **Check yourself:** Why must the `/api` routes be registered _before_ the fallback?
+- [x] Commit: `feat: serve angular build from express in production`
 
 ### Task 1.4: GitHub and CI
 
