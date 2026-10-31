@@ -166,14 +166,14 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 **Files:** create `server/vitest.config.ts`, `server/tests/health.test.ts`; modify `server/package.json`, root `package.json`
 
-- [ ] `npm install -D vitest supertest @types/supertest -w server`.
-- [ ] `vitest.config.ts`: test files in `tests/**/*.test.ts`; add `test.env` with `NODE_ENV: 'test'`,
+- [x] `npm install -D vitest supertest @types/supertest -w server`.
+- [x] `vitest.config.ts`: test files in `tests/**/*.test.ts`; add `test.env` with `NODE_ENV: 'test'`,
       `JWT_SECRET: 'test-secret'`, `MONGODB_URI: 'mongodb://unused'` (task 1.2's `config.ts` needs these).
-- [ ] Scripts: server `test` → `vitest run`; root `test` → `npm test --workspaces --if-present`.
-- [ ] Test `health.test.ts`:
+- [x] Scripts: server `test` → `vitest run`; root `test` → `npm test --workspaces --if-present`.
+- [x] Test `health.test.ts`:
   - `GET /api/health` returns 200 with body `{ ok: true }`
-- [ ] **Verify:** break the route on purpose → test fails; restore → `npm test` passes.
-- [ ] Commit: `test(server): add vitest and health test`
+- [x] **Verify:** break the route on purpose → test fails; restore → `npm test` passes.
+- [x] Commit: `test(server): add vitest and health test`
 
 ### Task 1.2: Config and MongoDB Atlas connection
 
@@ -183,19 +183,19 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 **Concepts:** environment variables, `node --env-file`, zod for config (spec §3), Atlas (spec §9).
 
-- [ ] **Atlas setup** — follow spec §9 "One-time setup → Atlas" steps 1–4. Save both connection
+- [x] **Atlas setup** — follow spec §9 "One-time setup → Atlas" steps 1–4. Save both connection
       strings in a password manager.
-- [ ] `npm install zod mongoose -w server`.
-- [ ] `config.ts`: a zod schema for `process.env` (`NODE_ENV` default `'development'`, `PORT` coerced to a
+- [x] `npm install zod mongoose -w server`.
+- [x] `config.ts`: a zod schema for `process.env` (`NODE_ENV` default `'development'`, `PORT` coerced to a
       number with default 3000, `MONGODB_URI` and `JWT_SECRET` required non-empty strings). Parse once; if it
       fails, print which variables are missing and exit the process with code 1.
-- [ ] `.env` with your dev string (`…/sanjis-dev`) and a random `JWT_SECRET` (spec §6 shows how to generate
+- [x] `.env` with your dev string (`…/sanjis-dev`) and a random `JWT_SECRET` (spec §6 shows how to generate
       one). `.env.example` with the same keys and fake values.
-- [ ] `server.ts`: `await mongoose.connect(config.mongodbUri)`, then listen. Log "Connected to MongoDB".
-- [ ] Server `dev` script → `tsx watch --env-file=.env src/server.ts`.
-- [ ] **Verify:** `npm run dev` logs the connection. Rename `JWT_SECRET` in `.env` → server refuses to
+- [x] `server.ts`: `await mongoose.connect(config.mongodbUri)`, then listen. Log "Connected to MongoDB".
+- [x] Server `dev` script → `tsx watch --env-file=.env src/server.ts`.
+- [x] **Verify:** `npm run dev` logs the connection. Rename `JWT_SECRET` in `.env` → server refuses to
       start with a clear message. Restore it. `git status` must **not** show `.env`.
-- [ ] Commit: `feat(server): add validated config and mongodb connection`
+- [x] Commit: `feat(server): add validated config and mongodb connection`
 
 ### Task 1.3: Production build — Express serves Angular
 
@@ -203,22 +203,22 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 **Concepts:** `express.static`, SPA fallback, `trust proxy` (spec §9 — read the two boxed explanations).
 
-- [ ] Root scripts: `build` → build client then server (`npm run build -w client && npm run build -w server`);
+- [x] Root scripts: `build` → build client then server (`npm run build -w client && npm run build -w server`);
       `start` → `npm start -w server`.
-- [ ] In `createApp()`, **only when `config.isProd`**:
+- [x] In `createApp()`, **only when `config.isProd`**:
   - `app.set('trust proxy', 1)`
   - `express.static` on the Angular output folder — `client/dist/client/browser`. Build the path from
     `import.meta.dirname` (the folder of the current file) going up to the repo root. It works from both
     `src/` and `dist/` because both are one level inside `server/`.
   - a fallback for `GET` requests not starting with `/api` → `res.sendFile(index.html)`. Express 5 needs
     the named-wildcard syntax (`'/{*splat}'`) — see the Express 5 migration guide.
-- [ ] Remove the temporary "API ok" check from the Angular `App` component; leave a simple title.
-- [ ] **Verify:** `npm run build`, then run the compiled server the way production would, loading your
+- [x] Remove the temporary "API ok" check from the Angular `App` component; leave a simple title.
+- [x] **Verify:** `npm run build`, then run the compiled server the way production would, loading your
       local `.env`: `cd server && NODE_ENV=production node --env-file=.env dist/server.js` → open
       `http://localhost:3000` → Angular app. Open `http://localhost:3000/some/deep/path` → still the app,
       not a 404. `/api/health` still returns JSON.
-- [ ] **Check yourself:** Why must the `/api` routes be registered _before_ the fallback?
-- [ ] Commit: `feat: serve angular build from express in production`
+- [x] **Check yourself:** Why must the `/api` routes be registered _before_ the fallback?
+- [x] Commit: `feat: serve angular build from express in production`
 
 ### Task 1.4: GitHub and CI
 
@@ -226,15 +226,15 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 **Concepts:** GitHub Actions workflow, job, steps; `actions/checkout`, `actions/setup-node`.
 
-- [ ] Create an empty GitHub repo `sanjis-cookbook` (website, or `gh repo create`), add it as `origin`,
+- [x] Create an empty GitHub repo `sanjis-cookbook` (website, or `gh repo create`), add it as `origin`,
       push `main`.
-- [ ] `ci.yml`: trigger on `push` and `pull_request`; one job on `ubuntu-latest`; steps: checkout →
+- [x] `ci.yml`: trigger on `push` and `pull_request`; one job on `ubuntu-latest`; steps: checkout →
       setup-node using `node-version-file: .nvmrc` and npm caching → `npm ci` → `npm run lint` →
       `npm run format:check` → `npm test` → `npm run build`.
-- [ ] Push your branch, open a PR to `main`.
-- [ ] **Verify:** the PR shows a green check. Break formatting on purpose in a commit → red ✗ → fix →
+- [x] Push your branch, open a PR to `main`.
+- [x] **Verify:** the PR shows a green check. Break formatting on purpose in a commit → red ✗ → fix →
       green.
-- [ ] Merge the PR.
+- [x] Merge the PR.
 
 ### Task 1.5: First deploy on Render
 
