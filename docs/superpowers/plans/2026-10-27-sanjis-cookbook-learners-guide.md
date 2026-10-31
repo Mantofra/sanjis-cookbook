@@ -226,9 +226,9 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 **Concepts:** GitHub Actions workflow, job, steps; `actions/checkout`, `actions/setup-node`.
 
-- [ ] Create an empty GitHub repo `sanjis-cookbook` (website, or `gh repo create`), add it as `origin`,
+- [x] Create an empty GitHub repo `sanjis-cookbook` (website, or `gh repo create`), add it as `origin`,
       push `main`.
-- [ ] `ci.yml`: trigger on `push` and `pull_request`; one job on `ubuntu-latest`; steps: checkout →
+- [x] `ci.yml`: trigger on `push` and `pull_request`; one job on `ubuntu-latest`; steps: checkout →
       setup-node using `node-version-file: .nvmrc` and npm caching → `npm ci` → `npm run lint` →
       `npm run format:check` → `npm test` → `npm run build`.
 - [ ] Push your branch, open a PR to `main`.
