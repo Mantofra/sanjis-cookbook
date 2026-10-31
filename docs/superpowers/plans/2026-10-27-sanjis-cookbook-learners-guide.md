@@ -231,10 +231,10 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 - [x] `ci.yml`: trigger on `push` and `pull_request`; one job on `ubuntu-latest`; steps: checkout →
       setup-node using `node-version-file: .nvmrc` and npm caching → `npm ci` → `npm run lint` →
       `npm run format:check` → `npm test` → `npm run build`.
-- [ ] Push your branch, open a PR to `main`.
-- [ ] **Verify:** the PR shows a green check. Break formatting on purpose in a commit → red ✗ → fix →
+- [x] Push your branch, open a PR to `main`.
+- [x] **Verify:** the PR shows a green check. Break formatting on purpose in a commit → red ✗ → fix →
       green.
-- [ ] Merge the PR.
+- [x] Merge the PR.
 
 ### Task 1.5: First deploy on Render
 
