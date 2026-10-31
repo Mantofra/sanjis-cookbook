@@ -1,6 +1,8 @@
-import path from 'node:path';
 import express from 'express';
+import path from 'node:path';
 import { config } from './config.js';
+import { errorHandler } from './middleware/error-handler.js';
+import { AppError } from './errors/app-error.js';
 
 // Angular build output. Works from both server/src and server/dist (each is one level inside server/).
 const clientDir = path.resolve(
@@ -25,6 +27,9 @@ export function createApp() {
   app.get('/api/health', (_req, res) => {
     res.status(200).json({ ok: true });
   });
+  app.use('/api', (_req, _res, next) => {
+    next(new AppError(404, 'Not found'));
+  });
 
   if (config.isProd) {
     app.use(express.static(clientDir));
@@ -34,6 +39,8 @@ export function createApp() {
       res.sendFile(path.join(clientDir, 'index.html'));
     });
   }
+
+  app.use(errorHandler);
 
   return app;
 }

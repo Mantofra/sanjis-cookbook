@@ -238,14 +238,14 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 ### Task 1.5: First deploy on Render
 
-- [ ] Follow spec §9 "One-time setup → Render", steps 1–5. Build command:
+- [x] Follow spec §9 "One-time setup → Render", steps 1–5. Build command:
       `npm ci --include=dev && npm run build`. Start command: `npm start`. Use the **prod** connection string
       and a **new** `JWT_SECRET`.
-- [ ] **Verify:** `https://<name>.onrender.com` shows the app; `/api/health` → `{"ok":true}`;
+- [x] **Verify:** `https://<name>.onrender.com` shows the app; `/api/health` → `{"ok":true}`;
       `/recipes/anything` loads the app. Wait 20 minutes, reload → see the slow wake-up you read about.
-- [ ] Read the Render deploy logs once from top to bottom, even if it worked: find the build command,
+- [x] Read the Render deploy logs once from top to bottom, even if it worked: find the build command,
       the start command and the "Connected to MongoDB" line.
-- [ ] **Check yourself:** What happens to a push to `main` whose CI fails?
+- [x] **Check yourself:** What happens to a push to `main` whose CI fails?
 
 ---
 
@@ -267,14 +267,14 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
   is `z.flattenError(error).fieldErrors`
 - unknown `/api/*` routes → 404 `{ error: { message: 'Not found' } }`
 
-- [ ] Tests (`errors.test.ts`):
+- [x] Tests (`errors.test.ts`):
   - `GET /api/does-not-exist` → 404 with `error.message` `'Not found'`
   - `POST /api/health` with body `'{bad json'` and `Content-Type: application/json` → 400 with an
     `error.message` (hint: Express's JSON parser errors have `type === 'entity.parse.failed'`)
   - responses never contain a `stack` field
-- [ ] Implement until green. The error-handler table in spec §8 lists every case — `CastError` and code
+- [x] Implement until green. The error-handler table in spec §8 lists every case — `CastError` and code
       `11000` can't be tested yet; they'll be covered by tests in 2.2 and 3.1.
-- [ ] Commit: `feat(server): add central error handling and validation middleware`
+- [x] Commit: `feat(server): add central error handling and validation middleware`
 
 ### Task 2.2: User model and register
 
