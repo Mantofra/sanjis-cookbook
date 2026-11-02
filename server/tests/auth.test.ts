@@ -1,7 +1,9 @@
+import jwt from 'jsonwebtoken';
 import request from 'supertest';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { createApp } from '../src/app.js';
 import { UserModel } from '../src/modules/users/user.model.js';
+import { registerAndGetCookie } from './helpers.js';
 
 const app = createApp();
 
@@ -69,5 +71,100 @@ describe('POST /api/auth/register', () => {
     expect(user).not.toBeNull();
     expect(user!.passwordHash).not.toBe(validBody.password);
     expect(user!.passwordHash.startsWith('$argon2')).toBe(true);
+  });
+});
+
+const login = (body: object) =>
+  request(app).post('/api/auth/login').set({ 'content-type': 'application/json' }).send(body);
+
+describe('POST /api/auth/login', () => {
+  it('returns 200 with the user and sets the token cookie', async () => {
+    await register(validBody);
+    const res = await login({ email: validBody.email, password: validBody.password });
+
+    expect(res.status).toBe(200);
+    expect(res.body.email).toBe('bob@example.com');
+    expect(res.body.passwordHash).toBeUndefined();
+
+    const cookie = (res.headers['set-cookie'] as unknown as string[])[0];
+    expect(cookie.startsWith('token=')).toBe(true);
+    expect(cookie).toContain('HttpOnly');
+
+    // The cookie must hold a real token: it should authenticate /me.
+    const me = await request(app).get('/api/auth/me').set('Cookie', cookie.split(';')[0]);
+    expect(me.status).toBe(200);
+  });
+
+  it('ignores email case', async () => {
+    await register(validBody);
+    const res = await login({ email: 'BOB@EXAMPLE.COM', password: validBody.password });
+
+    expect(res.status).toBe(200);
+  });
+
+  it('returns 401 for a wrong password', async () => {
+    await register(validBody);
+    const res = await login({ email: validBody.email, password: 'wrong-password' });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error.message).toBe('Invalid email or password');
+  });
+
+  it('returns 401 with the same message for an unknown email', async () => {
+    const res = await login({ email: 'nobody@example.com', password: validBody.password });
+
+    expect(res.status).toBe(401);
+    expect(res.body.error.message).toBe('Invalid email or password');
+  });
+});
+
+describe('GET /api/auth/me', () => {
+  it('returns 200 with the logged-in user', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const res = await request(app).get('/api/auth/me').set('Cookie', cookie);
+
+    expect(res.status).toBe(200);
+    expect(res.body.email).toBe('bob@example.com');
+    expect(res.body.displayName).toBe('Bob');
+    expect(res.body.passwordHash).toBeUndefined();
+  });
+
+  it('returns 401 without a cookie', async () => {
+    const res = await request(app).get('/api/auth/me');
+
+    expect(res.status).toBe(401);
+    expect(res.body.error.message).toBe('Not authenticated');
+  });
+
+  it('returns 401 with a garbage token', async () => {
+    const res = await request(app).get('/api/auth/me').set('Cookie', 'token=garbage');
+
+    expect(res.status).toBe(401);
+  });
+
+  it('returns 401 for a token signed with a different secret', async () => {
+    const { body } = await register(validBody);
+    const forged = jwt.sign({ sub: body.id }, 'not-the-real-secret', { expiresIn: '7d' });
+    const res = await request(app).get('/api/auth/me').set('Cookie', `token=${forged}`);
+
+    expect(res.status).toBe(401);
+  });
+});
+
+describe('POST /api/auth/logout', () => {
+  it('returns 204 and clears the token cookie', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const res = await request(app).post('/api/auth/logout').set('Cookie', cookie);
+
+    expect(res.status).toBe(204);
+    const cleared = (res.headers['set-cookie'] as unknown as string[])[0];
+    expect(cleared.startsWith('token=;')).toBe(true);
+    expect(cleared).toContain('Expires=Thu, 01 Jan 1970');
+  });
+
+  it('returns 401 without a cookie', async () => {
+    const res = await request(app).post('/api/auth/logout');
+
+    expect(res.status).toBe(401);
   });
 });

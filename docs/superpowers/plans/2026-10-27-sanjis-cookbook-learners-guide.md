@@ -323,7 +323,7 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
 - `POST /api/auth/logout` → 204, clears cookie (requires auth)
 - `GET /api/auth/me` → 200 + user (requires auth)
 
-- [ ] Tests (add to `auth.test.ts`). Tip: write a test helper `registerAndGetCookie(app, email?)` that
+- [x] Tests (add to `auth.test.ts`). Tip: write a test helper `registerAndGetCookie(app, email?)` that
       returns the `Set-Cookie` value — you'll reuse it in every later test file.
   - login with correct credentials → 200 + cookie
   - login with `BOB@EXAMPLE.COM` when registered as `bob@example.com` → 200
@@ -331,11 +331,11 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
   - `GET /me` with cookie → 200 + same user; without cookie → 401; with cookie `token=garbage` → 401
   - token signed with a different secret → 401
   - `POST /logout` → 204 and the `Set-Cookie` header clears `token`
-- [ ] Implement. Remember `cookieParser()` in `createApp()`, and that login must explicitly select
+- [x] Implement. Remember `cookieParser()` in `createApp()`, and that login must explicitly select
       `+passwordHash`.
-- [ ] **Check yourself:** Why the same message for wrong email and wrong password? Why can't the Angular
+- [x] **Check yourself:** Why the same message for wrong email and wrong password? Why can't the Angular
       app read the token itself?
-- [ ] Commit: `feat(auth): add login, logout, me and requireAuth`
+- [x] Commit: `feat(auth): add login, logout, me and requireAuth`
 
 ### Task 2.4: helmet and rate limiting
 
