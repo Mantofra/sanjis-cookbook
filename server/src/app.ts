@@ -1,8 +1,10 @@
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import path from 'node:path';
 import { config } from './config.js';
-import { errorHandler } from './middleware/error-handler.js';
 import { AppError } from './errors/app-error.js';
+import { errorHandler } from './middleware/error-handler.js';
+import authRouter from './modules/auth/auth.routes.js';
 
 // Angular build output. Works from both server/src and server/dist (each is one level inside server/).
 const clientDir = path.resolve(
@@ -24,6 +26,10 @@ export function createApp() {
   }
 
   app.use(express.json({ limit: '100kb' }));
+  app.use(cookieParser());
+
+  app.use('/api/auth', authRouter);
+
   app.get('/api/health', (_req, res) => {
     res.status(200).json({ ok: true });
   });

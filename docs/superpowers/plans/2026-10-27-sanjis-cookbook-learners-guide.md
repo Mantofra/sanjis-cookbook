@@ -293,12 +293,12 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
 
 **Concepts:** argon2 (spec §6), `select: false`, unique index, `toJSON` transform.
 
-- [ ] `npm install argon2 jsonwebtoken cookie-parser -w server` and
+- [x] `npm install argon2 jsonwebtoken cookie-parser -w server` and
       `npm install -D @types/jsonwebtoken @types/cookie-parser mongodb-memory-server -w server`.
-- [ ] `tests/setup.ts` (registered as `setupFiles` in vitest config): `beforeAll` start
+- [x] `tests/setup.ts` (registered as `setupFiles` in vitest config): `beforeAll` start
       `MongoMemoryServer` and `mongoose.connect` to it; `afterEach` delete all documents in every collection;
       `afterAll` disconnect and stop. (The first run downloads a MongoDB binary — be patient.)
-- [ ] Tests (`auth.test.ts`, register section):
+- [x] Tests (`auth.test.ts`, register section):
   - valid body → 201; body has `id`, `email`, `displayName`; **no** `passwordHash`; response has a
     `Set-Cookie` header starting with `token=` and containing `HttpOnly`
   - email `" Bob@Example.com "` is stored/returned as `bob@example.com`
@@ -306,9 +306,9 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
   - password of 7 characters → 400 with `details.password`
   - missing displayName → 400 with `details.displayName`
   - the stored `passwordHash` in the DB is not the plain password and starts with `$argon2`
-- [ ] Implement. Remember `await User.init()` or `syncIndexes` may be needed in tests so the unique index
+- [x] Implement. Remember `await User.init()` or `syncIndexes` may be needed in tests so the unique index
       exists before the duplicate test runs.
-- [ ] Commit: `feat(auth): add user model and registration`
+- [x] Commit: `feat(auth): add user model and registration`
 
 ### Task 2.3: Login, logout, me, requireAuth
 
