@@ -341,17 +341,17 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
 
 **Files:** modify `app.ts`, auth routes; create `server/tests/security.test.ts`
 
-- [ ] `npm install helmet express-rate-limit -w server`.
-- [ ] Tests:
+- [x] `npm install helmet express-rate-limit -w server`.
+- [x] Tests:
   - any response has header `x-content-type-options: nosniff`
   - 10 failed logins from the same app → 401 each; the 11th → 429
-- [ ] Implement: `helmet()` early in `createApp()`; one limiter (10 per 15 min) on login + register,
+- [x] Implement: `helmet()` early in `createApp()`; one limiter (10 per 15 min) on login + register,
       created **inside** `createApp()` so each test app gets fresh counters.
-- [ ] **Verify in the browser** (after a production build): no Content-Security-Policy errors in the
+- [x] **Verify in the browser** (after a production build): no Content-Security-Policy errors in the
       console. If you see one about an inline `onload` handler on a stylesheet, that's Angular's critical-CSS
       inlining — disable `inlineCritical` in the production `optimization.styles` options in `angular.json`
       instead of weakening helmet.
-- [ ] Commit: `feat(server): add helmet and auth rate limiting`
+- [x] Commit: `feat(server): add helmet and auth rate limiting`
 
 ### Task 2.5: Client auth
 

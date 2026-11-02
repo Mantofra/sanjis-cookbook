@@ -1,11 +1,17 @@
 import jwt from 'jsonwebtoken';
 import request from 'supertest';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import type { Express } from 'express';
 import { createApp } from '../src/app.js';
 import { UserModel } from '../src/modules/users/user.model.js';
 import { registerAndGetCookie } from './helpers.js';
 
-const app = createApp();
+// A fresh app per test gives each test its own rate-limit counter.
+let app: Express;
+
+beforeEach(() => {
+  app = createApp();
+});
 
 const validBody = {
   email: 'bob@example.com',
