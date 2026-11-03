@@ -238,14 +238,14 @@ Spec: §8 (testing, CI), §9 (deployment). From now on: create a branch per mile
 
 ### Task 1.5: First deploy on Render
 
-- [ ] Follow spec §9 "One-time setup → Render", steps 1–5. Build command:
+- [x] Follow spec §9 "One-time setup → Render", steps 1–5. Build command:
       `npm ci --include=dev && npm run build`. Start command: `npm start`. Use the **prod** connection string
       and a **new** `JWT_SECRET`.
-- [ ] **Verify:** `https://<name>.onrender.com` shows the app; `/api/health` → `{"ok":true}`;
+- [x] **Verify:** `https://<name>.onrender.com` shows the app; `/api/health` → `{"ok":true}`;
       `/recipes/anything` loads the app. Wait 20 minutes, reload → see the slow wake-up you read about.
-- [ ] Read the Render deploy logs once from top to bottom, even if it worked: find the build command,
+- [x] Read the Render deploy logs once from top to bottom, even if it worked: find the build command,
       the start command and the "Connected to MongoDB" line.
-- [ ] **Check yourself:** What happens to a push to `main` whose CI fails?
+- [x] **Check yourself:** What happens to a push to `main` whose CI fails?
 
 ---
 
@@ -267,14 +267,14 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
   is `z.flattenError(error).fieldErrors`
 - unknown `/api/*` routes → 404 `{ error: { message: 'Not found' } }`
 
-- [ ] Tests (`errors.test.ts`):
+- [x] Tests (`errors.test.ts`):
   - `GET /api/does-not-exist` → 404 with `error.message` `'Not found'`
   - `POST /api/health` with body `'{bad json'` and `Content-Type: application/json` → 400 with an
     `error.message` (hint: Express's JSON parser errors have `type === 'entity.parse.failed'`)
   - responses never contain a `stack` field
-- [ ] Implement until green. The error-handler table in spec §8 lists every case — `CastError` and code
+- [x] Implement until green. The error-handler table in spec §8 lists every case — `CastError` and code
       `11000` can't be tested yet; they'll be covered by tests in 2.2 and 3.1.
-- [ ] Commit: `feat(server): add central error handling and validation middleware`
+- [x] Commit: `feat(server): add central error handling and validation middleware`
 
 ### Task 2.2: User model and register
 
@@ -293,12 +293,12 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
 
 **Concepts:** argon2 (spec §6), `select: false`, unique index, `toJSON` transform.
 
-- [ ] `npm install argon2 jsonwebtoken cookie-parser -w server` and
+- [x] `npm install argon2 jsonwebtoken cookie-parser -w server` and
       `npm install -D @types/jsonwebtoken @types/cookie-parser mongodb-memory-server -w server`.
-- [ ] `tests/setup.ts` (registered as `setupFiles` in vitest config): `beforeAll` start
+- [x] `tests/setup.ts` (registered as `setupFiles` in vitest config): `beforeAll` start
       `MongoMemoryServer` and `mongoose.connect` to it; `afterEach` delete all documents in every collection;
       `afterAll` disconnect and stop. (The first run downloads a MongoDB binary — be patient.)
-- [ ] Tests (`auth.test.ts`, register section):
+- [x] Tests (`auth.test.ts`, register section):
   - valid body → 201; body has `id`, `email`, `displayName`; **no** `passwordHash`; response has a
     `Set-Cookie` header starting with `token=` and containing `HttpOnly`
   - email `" Bob@Example.com "` is stored/returned as `bob@example.com`
@@ -306,9 +306,9 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
   - password of 7 characters → 400 with `details.password`
   - missing displayName → 400 with `details.displayName`
   - the stored `passwordHash` in the DB is not the plain password and starts with `$argon2`
-- [ ] Implement. Remember `await User.init()` or `syncIndexes` may be needed in tests so the unique index
+- [x] Implement. Remember `await User.init()` or `syncIndexes` may be needed in tests so the unique index
       exists before the duplicate test runs.
-- [ ] Commit: `feat(auth): add user model and registration`
+- [x] Commit: `feat(auth): add user model and registration`
 
 ### Task 2.3: Login, logout, me, requireAuth
 
@@ -323,7 +323,7 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
 - `POST /api/auth/logout` → 204, clears cookie (requires auth)
 - `GET /api/auth/me` → 200 + user (requires auth)
 
-- [ ] Tests (add to `auth.test.ts`). Tip: write a test helper `registerAndGetCookie(app, email?)` that
+- [x] Tests (add to `auth.test.ts`). Tip: write a test helper `registerAndGetCookie(app, email?)` that
       returns the `Set-Cookie` value — you'll reuse it in every later test file.
   - login with correct credentials → 200 + cookie
   - login with `BOB@EXAMPLE.COM` when registered as `bob@example.com` → 200
@@ -331,27 +331,27 @@ Spec: §5 (auth routes), §6 (all of it), §8 (errors). Branch: `feat/auth`.
   - `GET /me` with cookie → 200 + same user; without cookie → 401; with cookie `token=garbage` → 401
   - token signed with a different secret → 401
   - `POST /logout` → 204 and the `Set-Cookie` header clears `token`
-- [ ] Implement. Remember `cookieParser()` in `createApp()`, and that login must explicitly select
+- [x] Implement. Remember `cookieParser()` in `createApp()`, and that login must explicitly select
       `+passwordHash`.
-- [ ] **Check yourself:** Why the same message for wrong email and wrong password? Why can't the Angular
+- [x] **Check yourself:** Why the same message for wrong email and wrong password? Why can't the Angular
       app read the token itself?
-- [ ] Commit: `feat(auth): add login, logout, me and requireAuth`
+- [x] Commit: `feat(auth): add login, logout, me and requireAuth`
 
 ### Task 2.4: helmet and rate limiting
 
 **Files:** modify `app.ts`, auth routes; create `server/tests/security.test.ts`
 
-- [ ] `npm install helmet express-rate-limit -w server`.
-- [ ] Tests:
+- [x] `npm install helmet express-rate-limit -w server`.
+- [x] Tests:
   - any response has header `x-content-type-options: nosniff`
   - 10 failed logins from the same app → 401 each; the 11th → 429
-- [ ] Implement: `helmet()` early in `createApp()`; one limiter (10 per 15 min) on login + register,
+- [x] Implement: `helmet()` early in `createApp()`; one limiter (10 per 15 min) on login + register,
       created **inside** `createApp()` so each test app gets fresh counters.
-- [ ] **Verify in the browser** (after a production build): no Content-Security-Policy errors in the
+- [x] **Verify in the browser** (after a production build): no Content-Security-Policy errors in the
       console. If you see one about an inline `onload` handler on a stylesheet, that's Angular's critical-CSS
       inlining — disable `inlineCritical` in the production `optimization.styles` options in `angular.json`
       instead of weakening helmet.
-- [ ] Commit: `feat(server): add helmet and auth rate limiting`
+- [x] Commit: `feat(server): add helmet and auth rate limiting`
 
 ### Task 2.5: Client auth
 
@@ -370,18 +370,18 @@ modify `app.config.ts`, `app.routes.ts`, the root component
 
 **Concepts:** signals, `provideAppInitializer`, functional guards and interceptors, reactive forms (spec §7).
 
-- [ ] `app.config.ts`: `provideHttpClient(withInterceptors([authInterceptor]))` and
+- [x] `app.config.ts`: `provideHttpClient(withInterceptors([authInterceptor]))` and
       `provideAppInitializer(() => inject(AuthService).loadMe())`.
-- [ ] Routes: `/login`, `/register`, `/recipes` (placeholder page for now, guarded), `''` → `/recipes`.
-- [ ] Login and register pages with reactive forms: show validation messages; show the server's
+- [x] Routes: `/login`, `/register`, `/recipes` (placeholder page for now, guarded), `''` → `/recipes`.
+- [x] Login and register pages with reactive forms: show validation messages; show the server's
       `error.message` on 401/409 and `details` on 400. After success → `/recipes`.
-- [ ] Header in the root component: when logged in, show display name and a Logout button.
-- [ ] **Verify manually:** register → land on `/recipes` → refresh → still logged in → DevTools →
+- [x] Header in the root component: when logged in, show display name and a Logout button.
+- [x] **Verify manually:** register → land on `/recipes` → refresh → still logged in → DevTools →
       Application → Cookies: `token` is HttpOnly → logout → `/recipes` redirects to `/login` → wrong password
       shows the error.
-- [ ] **Check yourself:** Why does the interceptor skip `/api/auth/*`? (Think about `loadMe` on the
+- [x] **Check yourself:** Why does the interceptor skip `/api/auth/*`? (Think about `loadMe` on the
       register page.)
-- [ ] Commit: `feat(client): add login, register and route protection`
+- [x] Commit: `feat(client): add login, register and route protection`
 
 ### Task 2.6: Ship it
 

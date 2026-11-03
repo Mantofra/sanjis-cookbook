@@ -10,5 +10,6 @@ export default defineConfig({
       JWT_SECRET: 'test-secret',
       MONGODB_URI: 'mongodb://unused',
     },
+    setupFiles: ['tests/setup.ts'],
   },
 });

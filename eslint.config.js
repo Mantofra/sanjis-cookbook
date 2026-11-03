@@ -24,6 +24,7 @@ export default defineConfig([
     // Lets ESLint also check templates written inline in @Component({ template: ... }).
     processor: angular.processInlineTemplates,
     rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@angular-eslint/directive-selector': [
         'error',
         { type: 'attribute', prefix: 'app', style: 'camelCase' },

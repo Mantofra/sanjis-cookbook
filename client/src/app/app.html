@@ -1,3 +1,9 @@
-<h1>{{ title() }}</h1>
+<header>
+  <h1>{{ title() }}</h1>
+  @if (auth.currentUser(); as user) {
+    <span>{{ user.displayName }}</span>
+    <button type="button" (click)="onLogout()">Logout</button>
+  }
+</header>
 
 <router-outlet />
