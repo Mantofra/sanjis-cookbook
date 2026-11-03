@@ -14,11 +14,9 @@ export class App {
   public auth = inject(AuthService);
 
   public onLogout(): void {
-    this.auth
-      .logout()
-      .subscribe({
-        next: () => this._router.navigateByUrl('/login'),
-        error: () => this._router.navigateByUrl('/login'),
-      });
+    this.auth.logout().subscribe({
+      next: () => this._router.navigateByUrl('/login'),
+      error: () => this._router.navigateByUrl('/login'),
+    });
   }
 }
