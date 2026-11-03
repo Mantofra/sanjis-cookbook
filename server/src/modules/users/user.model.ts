@@ -17,7 +17,7 @@ const userSchema = new Schema<User>(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function transform(_: any, ret: any) {
+function transform(_: any, ret: any): any {
   delete ret._id;
   delete ret.__v;
   delete ret.passwordHash;
@@ -28,12 +28,12 @@ function transform(_: any, ret: any) {
 
 userSchema.set('toJSON', {
   virtuals: true,
-  transform: transform,
+  transform,
 });
 
 userSchema.set('toObject', {
   virtuals: true,
-  transform: transform,
+  transform,
 });
 
 export const UserModel = model<User>('User', userSchema);

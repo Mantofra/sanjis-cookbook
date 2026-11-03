@@ -385,9 +385,9 @@ modify `app.config.ts`, `app.routes.ts`, the root component
 
 ### Task 2.6: Ship it
 
-- [ ] `npm run lint && npm run format:check && npm test && npm run build` locally → all green.
-- [ ] Push, PR, CI green, merge. Wait for Render to deploy.
-- [ ] **Verify in production:** register a real account; in DevTools the `token` cookie shows **Secure**
+- [x] `npm run lint && npm run format:check && npm test && npm run build` locally → all green.
+- [x] Push, PR, CI green, merge. Wait for Render to deploy.
+- [x] **Verify in production:** register a real account; in DevTools the `token` cookie shows **Secure**
       and **HttpOnly**.
 
 ---
