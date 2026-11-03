@@ -16,26 +16,24 @@ const userSchema = new Schema<User>(
   { timestamps: true },
 );
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function transform(_: any, ret: any) {
+  delete ret._id;
+  delete ret.__v;
+  delete ret.passwordHash;
+  delete ret.createdAt;
+  delete ret.updatedAt;
+  return ret;
+}
+
 userSchema.set('toJSON', {
   virtuals: true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  transform: (_, ret: any) => {
-    delete ret._id;
-    delete ret.__v;
-    delete ret.passwordHash;
-    return ret;
-  },
+  transform: transform,
 });
 
 userSchema.set('toObject', {
   virtuals: true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  transform: (_, ret: any) => {
-    delete ret._id;
-    delete ret.__v;
-    delete ret.passwordHash;
-    return ret;
-  },
+  transform: transform,
 });
 
 export const UserModel = model<User>('User', userSchema);

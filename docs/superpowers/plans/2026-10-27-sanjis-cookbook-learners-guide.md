@@ -370,18 +370,18 @@ modify `app.config.ts`, `app.routes.ts`, the root component
 
 **Concepts:** signals, `provideAppInitializer`, functional guards and interceptors, reactive forms (spec §7).
 
-- [ ] `app.config.ts`: `provideHttpClient(withInterceptors([authInterceptor]))` and
+- [x] `app.config.ts`: `provideHttpClient(withInterceptors([authInterceptor]))` and
       `provideAppInitializer(() => inject(AuthService).loadMe())`.
-- [ ] Routes: `/login`, `/register`, `/recipes` (placeholder page for now, guarded), `''` → `/recipes`.
-- [ ] Login and register pages with reactive forms: show validation messages; show the server's
+- [x] Routes: `/login`, `/register`, `/recipes` (placeholder page for now, guarded), `''` → `/recipes`.
+- [x] Login and register pages with reactive forms: show validation messages; show the server's
       `error.message` on 401/409 and `details` on 400. After success → `/recipes`.
-- [ ] Header in the root component: when logged in, show display name and a Logout button.
-- [ ] **Verify manually:** register → land on `/recipes` → refresh → still logged in → DevTools →
+- [x] Header in the root component: when logged in, show display name and a Logout button.
+- [x] **Verify manually:** register → land on `/recipes` → refresh → still logged in → DevTools →
       Application → Cookies: `token` is HttpOnly → logout → `/recipes` redirects to `/login` → wrong password
       shows the error.
-- [ ] **Check yourself:** Why does the interceptor skip `/api/auth/*`? (Think about `loadMe` on the
+- [x] **Check yourself:** Why does the interceptor skip `/api/auth/*`? (Think about `loadMe` on the
       register page.)
-- [ ] Commit: `feat(client): add login, register and route protection`
+- [x] Commit: `feat(client): add login, register and route protection`
 
 ### Task 2.6: Ship it
 

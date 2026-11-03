@@ -1,0 +1,47 @@
+<h2>Register</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="displayName">Display name</label>
+    <input id="displayName" type="text" formControlName="displayName" autocomplete="nickname" />
+    @if (form.controls.displayName.touched && form.controls.displayName.hasError('required')) {
+      <p>Display name is required.</p>
+    }
+    @if (form.controls.displayName.touched && form.controls.displayName.hasError('maxlength')) {
+      <p>Display name must be at most 50 characters.</p>
+    }
+  </div>
+
+  <div>
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email" autocomplete="email" />
+    @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+      <p>Email is required.</p>
+    }
+    @if (form.controls.email.touched && form.controls.email.hasError('email')) {
+      <p>Enter a valid email.</p>
+    }
+  </div>
+
+  <div>
+    <label for="password">Password</label>
+    <input id="password" type="password" formControlName="password" autocomplete="new-password" />
+    @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+      <p>Password is required.</p>
+    }
+    @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+      <p>Password must be at least 8 characters.</p>
+    }
+  </div>
+
+  @if (serverError()) {
+    <p>{{ serverError() }}</p>
+  }
+  @for (detail of serverDetails(); track detail) {
+    <p>{{ detail }}</p>
+  }
+
+  <button type="submit" [disabled]="form.invalid || submitting()">Register</button>
+</form>
+
+<p>Already have an account? <a routerLink="/login">Login</a></p>

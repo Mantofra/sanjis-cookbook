@@ -14,7 +14,7 @@ const cookieOptionS: CookieOptions = {
   path: '/',
 };
 
-export class AuthSrv {
+export class AuthService {
   async registerUser(input: RegisterInput): Promise<UserDocument> {
     const user = {
       email: input.email,
@@ -58,4 +58,4 @@ export class AuthSrv {
   }
 }
 
-export default new AuthSrv();
+export default new AuthService();

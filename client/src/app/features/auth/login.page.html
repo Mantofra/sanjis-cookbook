@@ -1,0 +1,38 @@
+<h2>Login</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="email">Email</label>
+    <input id="email" type="email" formControlName="email" autocomplete="email" />
+    @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+      <p>Email is required.</p>
+    }
+    @if (form.controls.email.touched && form.controls.email.hasError('email')) {
+      <p>Enter a valid email.</p>
+    }
+  </div>
+
+  <div>
+    <label for="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      formControlName="password"
+      autocomplete="current-password"
+    />
+    @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+      <p>Password is required.</p>
+    }
+  </div>
+
+  @if (serverError()) {
+    <p>{{ serverError() }}</p>
+  }
+  @for (detail of serverDetails(); track detail) {
+    <p>{{ detail }}</p>
+  }
+
+  <button type="submit" [disabled]="form.invalid || submitting()">Login</button>
+</form>
+
+<p>No account? <a routerLink="/register">Register</a></p>
