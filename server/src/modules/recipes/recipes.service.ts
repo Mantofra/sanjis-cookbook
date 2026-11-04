@@ -61,8 +61,39 @@ class RecipesService {
     }>(RECIPE_POPULATE);
 
     if (!recipe) throw new AppError(404, 'Recipe not found');
-    if (recipe.owner._id.toString() !== userId) throw new AppError(404, 'Recipe not found');
     return this.toRecipeDto(recipe, userId);
+  }
+
+  async listRecipes(userId: string, scope: 'mine' | 'shared'): Promise<RecipeDto[]> {
+    const filter = scope === 'mine' ? { owner: userId } : { sharedWith: userId };
+
+    const recipes = await RecipeModel.find(filter).sort({ updatedAt: -1 }).populate<{
+      owner: OwnerRef;
+      sharedWith: SharedUserRef[];
+    }>(RECIPE_POPULATE);
+    return recipes.map((recipe) => this.toRecipeDto(recipe, userId));
+  }
+
+  async updateRecipe(userId: string, id: string, input: object): Promise<RecipeDto> {
+    const recipe = await RecipeModel.findOneAndUpdate({ _id: id, owner: userId }, input, {
+      returnDocument: 'after',
+      runValidators: true,
+    }).populate<{
+      owner: OwnerRef;
+      sharedWith: SharedUserRef[];
+    }>(RECIPE_POPULATE);
+    if (!recipe) throw new AppError(404, 'Recipe not found');
+    return this.toRecipeDto(recipe, userId);
+  }
+
+  async deleteRecipe(userId: string, id: string): Promise<void> {
+    const recipe = await RecipeModel.findOneAndDelete({ _id: id, owner: userId }).populate<{
+      owner: OwnerRef;
+      sharedWith: SharedUserRef[];
+    }>(RECIPE_POPULATE);
+
+    if (!recipe) throw new AppError(404, 'Recipe not found');
+    return;
   }
 }
 

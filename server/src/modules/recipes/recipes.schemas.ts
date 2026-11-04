@@ -6,7 +6,7 @@ export const recipeInputSchema = z.object({
   servings: z.int().min(1),
   prepMinutes: z.int().min(0).optional(),
   cookMinutes: z.int().min(0).optional(),
-  tags: z.array(z.string().trim().min(1)).default([]),
+  tags: z.array(z.string().trim().min(1)).optional(),
   ingredients: z.array(
     z.object({
       quantity: z.int().positive().optional(),
@@ -41,3 +41,7 @@ export interface RecipeDto {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export const listRecipesQuerySchema = z.object({
+  scope: z.enum(['mine', 'shared']).default('mine'),
+});

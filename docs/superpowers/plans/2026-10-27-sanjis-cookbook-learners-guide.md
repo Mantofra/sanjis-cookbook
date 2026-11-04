@@ -415,7 +415,7 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
 - `createRecipe(userId, input): Promise<RecipeDto>`, `getRecipe(userId, id): Promise<RecipeDto>` (throws `AppError(404, 'Recipe not found')`)
 - `POST /api/recipes` → 201, `GET /api/recipes/:id` → 200; both behind `requireAuth`
 
-- [ ] Tests:
+- [x] Tests:
   - create with a valid body → 201; `isOwner: true`; `owner.id` is my id
   - body containing `owner: <someone else's id>` → recipe still owned by me
   - `servings: 0` → 400 `details.servings`; missing `title` → 400
@@ -423,9 +423,9 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
   - another user gets my recipe → **404**
   - `GET /api/recipes/not-an-id` → 404 (from the `CastError` case in the error handler)
   - no cookie → 401
-- [ ] Implement. Use the permission-in-query pattern (spec §5, rule 2). `populate('owner', 'displayName')`
+- [x] Implement. Use the permission-in-query pattern (spec §5, rule 2). `populate('owner', 'displayName')`
       to get the owner's name.
-- [ ] Commit: `feat(recipes): add recipe model, create and get`
+- [x] Commit: `feat(recipes): add recipe model, create and get`
 
 ### Task 3.2: List, update, delete
 
@@ -436,15 +436,15 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
 - `updateRecipe(userId, id, input): Promise<RecipeDto>`, `deleteRecipe(userId, id): Promise<void>`
 - `GET /api/recipes?scope=mine|shared` (default `mine`; anything else → 400), `PATCH /api/recipes/:id` → 200, `DELETE /api/recipes/:id` → 204
 
-- [ ] Tests:
+- [x] Tests:
   - list returns only my recipes, newest first
   - `?scope=banana` → 400
   - PATCH title → 200 with new title; other fields unchanged
   - PATCH `servings: 0` → 400
   - another user PATCHes / DELETEs my recipe → 404, and the recipe is unchanged / still exists
   - DELETE → 204, then GET → 404
-- [ ] Implement. For PATCH use `findOneAndUpdate` with `{ returnDocument: 'after', runValidators: true }`.
-- [ ] Commit: `feat(recipes): add list, update and delete`
+- [x] Implement. For PATCH use `findOneAndUpdate` with `{ returnDocument: 'after', runValidators: true }`.
+- [x] Commit: `feat(recipes): add list, update and delete`
 
 ### Task 3.3: Client — list, detail, form
 

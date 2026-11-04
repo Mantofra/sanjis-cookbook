@@ -4,7 +4,6 @@ import type { Express } from 'express';
 import { createApp } from '../src/app.js';
 import { registerAndGetCookie } from './helpers.js';
 
-// A fresh app per test gives each test its own rate-limit counter.
 let app: Express;
 
 beforeEach(() => {
@@ -38,6 +37,19 @@ const createRecipe = (cookie: string, body: object) =>
     .set('Cookie', cookie)
     .set({ 'content-type': 'application/json' })
     .send(body);
+
+const updateRecipe = (cookie: string, id: string, body: object) =>
+  request(app)
+    .patch(`/api/recipes/${id}`)
+    .set('Cookie', cookie)
+    .set({ 'content-type': 'application/json' })
+    .send(body);
+
+const getRecipe = (cookie: string, id: string) =>
+  request(app).get(`/api/recipes/${id}`).set('Cookie', cookie);
+
+const deleteRecipe = (cookie: string, id: string) =>
+  request(app).delete(`/api/recipes/${id}`).set('Cookie', cookie);
 
 describe('POST /api/recipes', () => {
   it('returns 201 with the recipe, owned by me', async () => {
@@ -153,6 +165,151 @@ describe('GET /api/recipes/:id', () => {
     const created = await createRecipe(cookie, validRecipe);
 
     const res = await request(app).get(`/api/recipes/${created.body.id}`);
+
+    expect(res.status).toBe(401);
+  });
+});
+
+describe('GET /api/recipes', () => {
+  it('returns only my recipes, newest first', async () => {
+    const otherCookie = await registerAndGetCookie(app, 'alice@example.com');
+    await createRecipe(otherCookie, { ...validRecipe, title: "Alice's recipe" });
+
+    const cookie = await registerAndGetCookie(app);
+    const myId = await getMyId(cookie);
+    await createRecipe(cookie, { ...validRecipe, title: 'Older' });
+    await createRecipe(cookie, { ...validRecipe, title: 'Newer' });
+
+    const res = await request(app).get('/api/recipes').set('Cookie', cookie);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(2);
+    for (const recipe of res.body) {
+      expect(recipe.owner.id).toBe(myId);
+    }
+    expect(res.body.map((r: { title: string }) => r.title)).toEqual(['Newer', 'Older']);
+    expect(Date.parse(res.body[0].updatedAt)).toBeGreaterThanOrEqual(
+      Date.parse(res.body[1].updatedAt),
+    );
+  });
+
+  it('returns 200 with ?scope=mine', async () => {
+    const cookie = await registerAndGetCookie(app);
+    await createRecipe(cookie, validRecipe);
+
+    const res = await request(app).get('/api/recipes?scope=mine').set('Cookie', cookie);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+  });
+
+  it('returns 200 and [] with ?scope=shared (until task 5.1)', async () => {
+    const cookie = await registerAndGetCookie(app);
+    await createRecipe(cookie, validRecipe);
+
+    const res = await request(app).get('/api/recipes?scope=shared').set('Cookie', cookie);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
+  });
+
+  it('returns 400 with wrong scope', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const res = await request(app).get('/api/recipes?scope=banana').set('Cookie', cookie);
+
+    expect(res.status).toBe(400);
+  });
+
+  it('returns 401 without a cookie', async () => {
+    const res = await request(app).get('/api/recipes');
+
+    expect(res.status).toBe(401);
+  });
+});
+
+describe('PATCH /api/recipes/:id', () => {
+  it('returns 200 with the new title; other fields unchanged', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const created = await createRecipe(cookie, validRecipe);
+
+    const res = await updateRecipe(cookie, created.body.id, { title: 'Pasta alla carbonara' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.id).toBe(created.body.id);
+    expect(res.body.title).toBe('Pasta alla carbonara');
+    expect(res.body.description).toBe(validRecipe.description);
+    expect(res.body.servings).toBe(validRecipe.servings);
+    expect(res.body.tags).toEqual(validRecipe.tags);
+    expect(res.body.ingredients).toEqual(created.body.ingredients);
+    expect(res.body.steps).toEqual(validRecipe.steps);
+    expect(res.body.isOwner).toBe(true);
+  });
+
+  it('returns 400 with details.servings when servings is 0', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const created = await createRecipe(cookie, validRecipe);
+
+    const res = await updateRecipe(cookie, created.body.id, { servings: 0 });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error.details.servings).toBeDefined();
+  });
+
+  it('returns 404 when another user patches my recipe, and the recipe is unchanged', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const created = await createRecipe(cookie, validRecipe);
+    const otherCookie = await registerAndGetCookie(app, 'alice@example.com');
+
+    const res = await updateRecipe(otherCookie, created.body.id, { title: 'Hacked' });
+
+    expect(res.status).toBe(404);
+    const after = await getRecipe(cookie, created.body.id);
+    expect(after.status).toBe(200);
+    expect(after.body.title).toBe(validRecipe.title);
+  });
+
+  it('returns 401 without a cookie', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const created = await createRecipe(cookie, validRecipe);
+
+    const res = await request(app)
+      .patch(`/api/recipes/${created.body.id}`)
+      .set({ 'content-type': 'application/json' })
+      .send({ title: 'Nope' });
+
+    expect(res.status).toBe(401);
+  });
+});
+
+describe('DELETE /api/recipes/:id', () => {
+  it('returns 204, then GET returns 404', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const created = await createRecipe(cookie, validRecipe);
+
+    const res = await deleteRecipe(cookie, created.body.id);
+
+    expect(res.status).toBe(204);
+    const after = await getRecipe(cookie, created.body.id);
+    expect(after.status).toBe(404);
+  });
+
+  it('returns 404 when another user deletes my recipe, and the recipe still exists', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const created = await createRecipe(cookie, validRecipe);
+    const otherCookie = await registerAndGetCookie(app, 'alice@example.com');
+
+    const res = await deleteRecipe(otherCookie, created.body.id);
+
+    expect(res.status).toBe(404);
+    const after = await getRecipe(cookie, created.body.id);
+    expect(after.status).toBe(200);
+  });
+
+  it('returns 401 without a cookie', async () => {
+    const cookie = await registerAndGetCookie(app);
+    const created = await createRecipe(cookie, validRecipe);
+
+    const res = await request(app).delete(`/api/recipes/${created.body.id}`);
 
     expect(res.status).toBe(401);
   });
