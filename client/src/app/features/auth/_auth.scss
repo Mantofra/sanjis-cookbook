@@ -1,0 +1,129 @@
+// Shared styles for the login and register pages.
+// Same palette and components as the recipe pages.
+$accent: #c2410c;
+$border: #e5e7eb;
+$muted: #6b7280;
+$danger: #b91c1c;
+
+:host {
+  display: block;
+}
+
+.auth {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+
+  &__card {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    border: 1px solid $border;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  &__title {
+    margin: 0 0 1.5rem;
+    text-align: center;
+  }
+
+  &__switch {
+    margin: 1.5rem 0 0;
+    color: $muted;
+    font-size: 0.875rem;
+    text-align: center;
+
+    a {
+      color: $accent;
+      font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid $border;
+  border-radius: 6px;
+  font: inherit;
+
+  &:focus {
+    outline: 2px solid rgba($accent, 0.3);
+    border-color: $accent;
+  }
+
+  &.ng-invalid.ng-touched {
+    border-color: $danger;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+
+  label {
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  &__error {
+    margin: 0;
+    color: $danger;
+    font-size: 0.8rem;
+  }
+}
+
+.form-error {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background: #fef2f2;
+  color: $danger;
+  font-size: 0.875rem;
+
+  p {
+    margin: 0;
+
+    & + p {
+      margin-top: 0.25rem;
+    }
+  }
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid $border;
+  border-radius: 6px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  &--primary {
+    border-color: $accent;
+    background: $accent;
+    color: #fff;
+  }
+
+  &--block {
+    display: block;
+    width: 100%;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

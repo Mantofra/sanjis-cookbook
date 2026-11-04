@@ -1,0 +1,38 @@
+<section class="recipe-list">
+  <header class="recipe-list__header">
+    <h2>My recipes</h2>
+    <a class="btn btn--primary" routerLink="/recipes/new">New recipe</a>
+  </header>
+
+  @if (loading()) {
+    <p class="recipe-list__status">Loading…</p>
+  } @else if (error()) {
+    <p class="recipe-list__status recipe-list__status--error">{{ error() }}</p>
+  } @else {
+    <ul class="recipe-list__items">
+      @for (recipe of recipes(); track recipe.id) {
+        <li class="recipe-card">
+          <a class="recipe-card__link" [routerLink]="['/recipes', recipe.id]">
+            <h3 class="recipe-card__title">{{ recipe.title }}</h3>
+
+            @if (recipe.tags.length) {
+              <ul class="recipe-card__tags">
+                @for (tag of recipe.tags; track tag) {
+                  <li class="tag">{{ tag }}</li>
+                }
+              </ul>
+            }
+
+            @if (recipe.prepMinutes || recipe.cookMinutes) {
+              <p class="recipe-card__time">
+                {{ (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0) }} min total
+              </p>
+            }
+          </a>
+        </li>
+      } @empty {
+        <li class="recipe-list__empty">No recipes yet</li>
+      }
+    </ul>
+  }
+</section>

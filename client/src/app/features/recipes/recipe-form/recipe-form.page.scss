@@ -1,0 +1,169 @@
+$accent: #c2410c;
+$border: #e5e7eb;
+$muted: #6b7280;
+$danger: #b91c1c;
+
+:host {
+  display: block;
+}
+
+.recipe-form {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+
+  h2 {
+    margin-top: 0;
+  }
+}
+
+input,
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid $border;
+  border-radius: 6px;
+  font: inherit;
+
+  &:focus {
+    outline: 2px solid rgba($accent, 0.3);
+    border-color: $accent;
+  }
+
+  &.ng-invalid.ng-touched {
+    border-color: $danger;
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+
+  label {
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  &__hint {
+    margin: 0;
+    color: $muted;
+    font-size: 0.8rem;
+  }
+
+  &__error {
+    margin: 0;
+    color: $danger;
+    font-size: 0.8rem;
+  }
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+  padding: 1rem;
+  border: 1px solid $border;
+  border-radius: 8px;
+
+  legend {
+    padding: 0 0.25rem;
+    font-weight: 600;
+  }
+
+  &__row {
+    display: grid;
+    align-items: start;
+    gap: 0.5rem;
+
+    &--ingredient {
+      grid-template-columns: 5rem 6rem minmax(0, 1fr) auto;
+
+      @media (max-width: 560px) {
+        grid-template-columns: 1fr 1fr auto;
+
+        input[formControlName='name'] {
+          grid-column: 1 / 3;
+          grid-row: 2;
+        }
+      }
+    }
+
+    &--step {
+      grid-template-columns: 1.75rem minmax(0, 1fr) auto;
+    }
+  }
+
+  &__index {
+    padding-top: 0.5rem;
+    color: $muted;
+    text-align: right;
+  }
+
+  > .btn {
+    align-self: flex-start;
+  }
+}
+
+.form-error {
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  background: #fef2f2;
+  color: $danger;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 1px solid $border;
+  border-radius: 6px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+
+  &--primary {
+    border-color: $accent;
+    background: $accent;
+    color: #fff;
+  }
+
+  &--icon {
+    padding: 0.5rem 0.65rem;
+    color: $muted;
+
+    &:hover {
+      border-color: $danger;
+      color: $danger;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

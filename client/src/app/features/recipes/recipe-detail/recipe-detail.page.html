@@ -1,0 +1,95 @@
+<section class="recipe-detail">
+  <a class="recipe-detail__back" routerLink="/recipes">← Back to recipes</a>
+
+  @if (loading()) {
+    <p class="recipe-detail__status">Loading…</p>
+  } @else if (notFound()) {
+    <p class="recipe-detail__status">Recipe not found.</p>
+  } @else if (error()) {
+    <p class="recipe-detail__status recipe-detail__status--error">{{ error() }}</p>
+  } @else if (recipe(); as recipe) {
+    <header class="recipe-detail__header">
+      <div>
+        <h2 class="recipe-detail__title">{{ recipe.title }}</h2>
+        <p class="recipe-detail__owner">by {{ recipe.owner.displayName }}</p>
+      </div>
+
+      @if (recipe.isOwner) {
+        <div class="recipe-detail__actions">
+          <a class="btn" [routerLink]="['/recipes', recipe.id, 'edit']">Edit</a>
+          <button
+            type="button"
+            class="btn btn--danger"
+            [disabled]="deleting()"
+            (click)="onDelete()"
+          >
+            Delete
+          </button>
+        </div>
+      }
+    </header>
+
+    @if (recipe.tags.length) {
+      <ul class="recipe-detail__tags">
+        @for (tag of recipe.tags; track tag) {
+          <li class="tag">{{ tag }}</li>
+        }
+      </ul>
+    }
+
+    @if (recipe.description) {
+      <p class="recipe-detail__description">{{ recipe.description }}</p>
+    }
+
+    <dl class="recipe-detail__meta">
+      <div>
+        <dt>Servings</dt>
+        <dd>{{ recipe.servings }}</dd>
+      </div>
+      @if (recipe.prepMinutes !== undefined) {
+        <div>
+          <dt>Prep</dt>
+          <dd>{{ recipe.prepMinutes }} min</dd>
+        </div>
+      }
+      @if (recipe.cookMinutes !== undefined) {
+        <div>
+          <dt>Cook</dt>
+          <dd>{{ recipe.cookMinutes }} min</dd>
+        </div>
+      }
+    </dl>
+
+    <div class="recipe-detail__body">
+      <section>
+        <h3>Ingredients</h3>
+        <ul class="recipe-detail__ingredients">
+          @for (ingredient of recipe.ingredients; track $index) {
+            <li>
+              @if (ingredient.quantity !== undefined) {
+                <span class="qty">{{ ingredient.quantity }}</span>
+              }
+              @if (ingredient.unit) {
+                <span class="unit">{{ ingredient.unit }}</span>
+              }
+              <span>{{ ingredient.name }}</span>
+            </li>
+          } @empty {
+            <li class="recipe-detail__empty">No ingredients.</li>
+          }
+        </ul>
+      </section>
+
+      <section>
+        <h3>Steps</h3>
+        <ol class="recipe-detail__steps">
+          @for (step of recipe.steps; track $index) {
+            <li>{{ step }}</li>
+          } @empty {
+            <li class="recipe-detail__empty">No steps.</li>
+          }
+        </ol>
+      </section>
+    </div>
+  }
+</section>

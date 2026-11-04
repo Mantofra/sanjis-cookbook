@@ -6,6 +6,7 @@ import { config } from './config.js';
 import { AppError } from './errors/app-error.js';
 import { errorHandler } from './middleware/error-handler.js';
 import { createAuthRouter } from './modules/auth/auth.routes.js';
+import { createRecipesRouter } from './modules/recipes/recipes.routes.js';
 
 // Angular build output. Works from both server/src and server/dist (each is one level inside server/).
 const clientDir = path.resolve(
@@ -31,6 +32,7 @@ export function createApp() {
   app.use(cookieParser());
 
   app.use('/api/auth', createAuthRouter());
+  app.use('/api/recipes', createRecipesRouter());
 
   app.get('/api/health', (_req, res) => {
     res.status(200).json({ ok: true });

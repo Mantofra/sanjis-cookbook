@@ -385,9 +385,9 @@ modify `app.config.ts`, `app.routes.ts`, the root component
 
 ### Task 2.6: Ship it
 
-- [ ] `npm run lint && npm run format:check && npm test && npm run build` locally → all green.
-- [ ] Push, PR, CI green, merge. Wait for Render to deploy.
-- [ ] **Verify in production:** register a real account; in DevTools the `token` cookie shows **Secure**
+- [x] `npm run lint && npm run format:check && npm test && npm run build` locally → all green.
+- [x] Push, PR, CI green, merge. Wait for Render to deploy.
+- [x] **Verify in production:** register a real account; in DevTools the `token` cookie shows **Secure**
       and **HttpOnly**.
 
 ---
@@ -415,7 +415,7 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
 - `createRecipe(userId, input): Promise<RecipeDto>`, `getRecipe(userId, id): Promise<RecipeDto>` (throws `AppError(404, 'Recipe not found')`)
 - `POST /api/recipes` → 201, `GET /api/recipes/:id` → 200; both behind `requireAuth`
 
-- [ ] Tests:
+- [x] Tests:
   - create with a valid body → 201; `isOwner: true`; `owner.id` is my id
   - body containing `owner: <someone else's id>` → recipe still owned by me
   - `servings: 0` → 400 `details.servings`; missing `title` → 400
@@ -423,9 +423,9 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
   - another user gets my recipe → **404**
   - `GET /api/recipes/not-an-id` → 404 (from the `CastError` case in the error handler)
   - no cookie → 401
-- [ ] Implement. Use the permission-in-query pattern (spec §5, rule 2). `populate('owner', 'displayName')`
+- [x] Implement. Use the permission-in-query pattern (spec §5, rule 2). `populate('owner', 'displayName')`
       to get the owner's name.
-- [ ] Commit: `feat(recipes): add recipe model, create and get`
+- [x] Commit: `feat(recipes): add recipe model, create and get`
 
 ### Task 3.2: List, update, delete
 
@@ -436,15 +436,15 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
 - `updateRecipe(userId, id, input): Promise<RecipeDto>`, `deleteRecipe(userId, id): Promise<void>`
 - `GET /api/recipes?scope=mine|shared` (default `mine`; anything else → 400), `PATCH /api/recipes/:id` → 200, `DELETE /api/recipes/:id` → 204
 
-- [ ] Tests:
+- [x] Tests:
   - list returns only my recipes, newest first
   - `?scope=banana` → 400
   - PATCH title → 200 with new title; other fields unchanged
   - PATCH `servings: 0` → 400
   - another user PATCHes / DELETEs my recipe → 404, and the recipe is unchanged / still exists
   - DELETE → 204, then GET → 404
-- [ ] Implement. For PATCH use `findOneAndUpdate` with `{ returnDocument: 'after', runValidators: true }`.
-- [ ] Commit: `feat(recipes): add list, update and delete`
+- [x] Implement. For PATCH use `findOneAndUpdate` with `{ returnDocument: 'after', runValidators: true }`.
+- [x] Commit: `feat(recipes): add list, update and delete`
 
 ### Task 3.3: Client — list, detail, form
 
@@ -457,16 +457,16 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
 - `RecipesService`: `list(scope: 'mine' | 'shared'): Observable<Recipe[]>`, `get(id)`, `create(input)`,
   `update(id, input)`, `remove(id)`; task 5.2 adds `share(id, email)` and `unshare(id, userId)`
 
-- [ ] Routes from spec §7 (all guarded).
-- [ ] List page: cards/rows with title, tags, total time. "New recipe" button. Empty state: "No recipes
+- [x] Routes from spec §7 (all guarded).
+- [x] List page: cards/rows with title, tags, total time. "New recipe" button. Empty state: "No recipes
       yet".
-- [ ] Detail page: everything readable; Edit and Delete buttons only when `isOwner` (delete asks for
+- [x] Detail page: everything readable; Edit and Delete buttons only when `isOwner` (delete asks for
       confirmation, then goes to the list).
-- [ ] Form page (create + edit share one component; edit mode when the route has `:id`): a `FormArray` of
+- [x] Form page (create + edit share one component; edit mode when the route has `:id`): a `FormArray` of
       ingredient groups (quantity, unit, name) and a `FormArray` of step controls, each row with remove, plus
       "add ingredient" / "add step" buttons. Empty optional fields must be **omitted** (not sent as `""` or
       `null`) or the server will reject them. Show server `details` next to the fields.
-- [ ] **Verify manually:** create, view, edit (add/remove rows), delete. As a second user (another browser
+- [x] **Verify manually:** create, view, edit (add/remove rows), delete. As a second user (another browser
       or a private window), paste the first user's recipe URL → the app shows "not found".
 - [ ] Ship it (lint/format/test/build, PR, CI, merge, check production).
 
