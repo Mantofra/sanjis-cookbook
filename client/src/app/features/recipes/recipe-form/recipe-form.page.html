@@ -1,0 +1,151 @@
+<section class="recipe-form">
+  <h2>{{ isEdit() ? 'Edit recipe' : 'New recipe' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- Title -->
+    <div class="field">
+      <label for="title">Title *</label>
+      <input id="title" type="text" formControlName="title" maxlength="120" />
+      @if (form.controls.title.touched && form.controls.title.hasError('required')) {
+        <p class="field__error">Title is required.</p>
+      }
+      @for (msg of serverDetails()['title']; track msg) {
+        <p class="field__error">{{ msg }}</p>
+      }
+    </div>
+
+    <!-- Description -->
+    <div class="field">
+      <label for="description">Description</label>
+      <textarea id="description" rows="3" formControlName="description" maxlength="2000"></textarea>
+      @for (msg of serverDetails()['description']; track msg) {
+        <p class="field__error">{{ msg }}</p>
+      }
+    </div>
+
+    <!-- Servings / times -->
+    <div class="field-row">
+      <div class="field">
+        <label for="servings">Servings *</label>
+        <input id="servings" type="number" min="1" step="1" formControlName="servings" />
+        @if (form.controls.servings.touched && form.controls.servings.invalid) {
+          <p class="field__error">At least 1 serving.</p>
+        }
+        @for (msg of serverDetails()['servings']; track msg) {
+          <p class="field__error">{{ msg }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="prepMinutes">Prep (min)</label>
+        <input id="prepMinutes" type="number" min="0" step="1" formControlName="prepMinutes" />
+        @for (msg of serverDetails()['prepMinutes']; track msg) {
+          <p class="field__error">{{ msg }}</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="cookMinutes">Cook (min)</label>
+        <input id="cookMinutes" type="number" min="0" step="1" formControlName="cookMinutes" />
+        @for (msg of serverDetails()['cookMinutes']; track msg) {
+          <p class="field__error">{{ msg }}</p>
+        }
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="field">
+      <label for="tags">Tags</label>
+      <input id="tags" type="text" formControlName="tags" placeholder="pasta, vegetarian, quick" />
+      <p class="field__hint">Comma-separated.</p>
+      @for (msg of serverDetails()['tags']; track msg) {
+        <p class="field__error">{{ msg }}</p>
+      }
+    </div>
+
+    <!-- Ingredients -->
+    <fieldset class="group" formArrayName="ingredients">
+      <legend>Ingredients</legend>
+
+      @for (ingredient of ingredients.controls; track ingredient; let i = $index) {
+        <div class="group__row group__row--ingredient" [formGroupName]="i">
+          <input
+            type="number"
+            min="0"
+            step="any"
+            formControlName="quantity"
+            placeholder="Qty"
+            [attr.aria-label]="'Ingredient ' + (i + 1) + ' quantity'"
+          />
+          <input
+            type="text"
+            formControlName="unit"
+            placeholder="Unit"
+            [attr.aria-label]="'Ingredient ' + (i + 1) + ' unit'"
+          />
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Name *"
+            [attr.aria-label]="'Ingredient ' + (i + 1) + ' name'"
+          />
+          <button
+            type="button"
+            class="btn btn--icon"
+            (click)="removeIngredient(i)"
+            [attr.aria-label]="'Remove ingredient ' + (i + 1)"
+          >
+            ✕
+          </button>
+        </div>
+      } @empty {
+        <p class="field__hint">No ingredients yet.</p>
+      }
+
+      @for (msg of serverDetails()['ingredients']; track msg) {
+        <p class="field__error">{{ msg }}</p>
+      }
+
+      <button type="button" class="btn" (click)="addIngredient()">+ Add ingredient</button>
+    </fieldset>
+
+    <!-- Steps -->
+    <fieldset class="group" formArrayName="steps">
+      <legend>Steps</legend>
+
+      @for (step of steps.controls; track step; let i = $index) {
+        <div class="group__row group__row--step">
+          <span class="group__index">{{ i + 1 }}.</span>
+          <textarea rows="2" [formControlName]="i" [attr.aria-label]="'Step ' + (i + 1)"></textarea>
+          <button
+            type="button"
+            class="btn btn--icon"
+            (click)="removeStep(i)"
+            [attr.aria-label]="'Remove step ' + (i + 1)"
+          >
+            ✕
+          </button>
+        </div>
+      } @empty {
+        <p class="field__hint">No steps yet.</p>
+      }
+
+      @for (msg of serverDetails()['steps']; track msg) {
+        <p class="field__error">{{ msg }}</p>
+      }
+
+      <button type="button" class="btn" (click)="addStep()">+ Add step</button>
+    </fieldset>
+
+    @if (serverError()) {
+      <p class="form-error">{{ serverError() }}</p>
+    }
+
+    <div class="actions">
+      <a class="btn" [routerLink]="isEdit() ? ['/recipes', id()] : ['/recipes']">Cancel</a>
+      <button type="submit" class="btn btn--primary" [disabled]="form.invalid || submitting()">
+        {{ isEdit() ? 'Save changes' : 'Create recipe' }}
+      </button>
+    </div>
+  </form>
+</section>

@@ -24,7 +24,6 @@ export const listRecipes = async (req: Request, res: Response) => {
 };
 
 export const updateRecipe = async (req: Request<{ id: string }>, res: Response) => {
-  console.log(req.body);
   const result = await recipesService.updateRecipe(req.userId!, req.params.id, req.body);
   res.status(200).json(result);
 };

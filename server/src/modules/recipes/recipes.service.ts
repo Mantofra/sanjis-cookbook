@@ -67,7 +67,7 @@ class RecipesService {
   async listRecipes(userId: string, scope: 'mine' | 'shared'): Promise<RecipeDto[]> {
     const filter = scope === 'mine' ? { owner: userId } : { sharedWith: userId };
 
-    const recipes = await RecipeModel.find(filter).sort({ updatedAt: -1 }).populate<{
+    const recipes = await RecipeModel.find(filter).sort({ updatedAt: -1, _id: -1 }).populate<{
       owner: OwnerRef;
       sharedWith: SharedUserRef[];
     }>(RECIPE_POPULATE);

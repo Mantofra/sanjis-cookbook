@@ -9,9 +9,9 @@ export const recipeInputSchema = z.object({
   tags: z.array(z.string().trim().min(1)).optional(),
   ingredients: z.array(
     z.object({
-      quantity: z.int().positive().optional(),
+      quantity: z.number().positive().optional(),
       unit: z.string().trim().optional(),
-      name: z.string().nonempty(),
+      name: z.string().trim().nonempty(),
     }),
   ),
   steps: z.array(z.string().trim().min(1)),

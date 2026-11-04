@@ -457,16 +457,16 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
 - `RecipesService`: `list(scope: 'mine' | 'shared'): Observable<Recipe[]>`, `get(id)`, `create(input)`,
   `update(id, input)`, `remove(id)`; task 5.2 adds `share(id, email)` and `unshare(id, userId)`
 
-- [ ] Routes from spec §7 (all guarded).
-- [ ] List page: cards/rows with title, tags, total time. "New recipe" button. Empty state: "No recipes
+- [x] Routes from spec §7 (all guarded).
+- [x] List page: cards/rows with title, tags, total time. "New recipe" button. Empty state: "No recipes
       yet".
-- [ ] Detail page: everything readable; Edit and Delete buttons only when `isOwner` (delete asks for
+- [x] Detail page: everything readable; Edit and Delete buttons only when `isOwner` (delete asks for
       confirmation, then goes to the list).
-- [ ] Form page (create + edit share one component; edit mode when the route has `:id`): a `FormArray` of
+- [x] Form page (create + edit share one component; edit mode when the route has `:id`): a `FormArray` of
       ingredient groups (quantity, unit, name) and a `FormArray` of step controls, each row with remove, plus
       "add ingredient" / "add step" buttons. Empty optional fields must be **omitted** (not sent as `""` or
       `null`) or the server will reject them. Show server `details` next to the fields.
-- [ ] **Verify manually:** create, view, edit (add/remove rows), delete. As a second user (another browser
+- [x] **Verify manually:** create, view, edit (add/remove rows), delete. As a second user (another browser
       or a private window), paste the first user's recipe URL → the app shows "not found".
 - [ ] Ship it (lint/format/test/build, PR, CI, merge, check production).
 

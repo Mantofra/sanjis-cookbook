@@ -107,6 +107,27 @@ describe('POST /api/recipes', () => {
     expect(res.body.error.details.servings).toBeDefined();
   });
 
+  it('accepts a fractional ingredient quantity', async () => {
+    const cookie = await registerAndGetCookie(app);
+
+    const res = await createRecipe(cookie, {
+      ...validRecipe,
+      ingredients: [{ quantity: 0.5, unit: 'cup', name: 'milk' }],
+    });
+
+    expect(res.status).toBe(201);
+    expect(res.body.ingredients[0].quantity).toBe(0.5);
+  });
+
+  it('returns 400 with details.ingredients when an ingredient name is only spaces', async () => {
+    const cookie = await registerAndGetCookie(app);
+
+    const res = await createRecipe(cookie, { ...validRecipe, ingredients: [{ name: '   ' }] });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error.details.ingredients).toBeDefined();
+  });
+
   it('returns 400 with details.title when the title is missing', async () => {
     const cookie = await registerAndGetCookie(app);
     const res = await createRecipe(cookie, { ...validRecipe, title: undefined });
