@@ -468,7 +468,7 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
       `null`) or the server will reject them. Show server `details` next to the fields.
 - [x] **Verify manually:** create, view, edit (add/remove rows), delete. As a second user (another browser
       or a private window), paste the first user's recipe URL → the app shows "not found".
-- [ ] Ship it (lint/format/test/build, PR, CI, merge, check production).
+- [x] Ship it (lint/format/test/build, PR, CI, merge, check production).
 
 ---
 
@@ -483,15 +483,15 @@ Spec: §7 "Servings scaling". Branch: `feat/scaling`. Client tests: run `npm tes
 
 **Interfaces — produces:** `scaleIngredients(ingredients: Ingredient[], baseServings: number, targetServings: number): Ingredient[]`
 
-- [ ] Tests:
+- [x] Tests:
   - 200 g for 4 → target 2 → 100 g
   - 1 for 3 → target 1 → quantity close to 0.3333 (`toBeCloseTo`)
   - ingredient without `quantity` → returned without `quantity`, everything else equal
   - unit and name never change
   - input array and its objects are not mutated (compare with a deep copy taken before)
   - target `0`, negative, non-integer or `NaN` → quantities unchanged (factor 1)
-- [ ] Implement: pure, no Angular imports.
-- [ ] Commit: `feat(client): add ingredient scaling function`
+- [x] Implement: pure, no Angular imports.
+- [x] Commit: `feat(client): add ingredient scaling function`
 
 ### Task 4.2: Quantity display pipe
 
