@@ -541,7 +541,7 @@ Spec: §5 (sharing routes and rules 5–6). Branch: `feat/sharing`.
 - `POST /api/recipes/:id/shares` `{ email }` → 200 + recipe; `DELETE /api/recipes/:id/shares/:userId` → 200 + recipe
 - `listRecipes(userId, 'shared')` now returns recipes where `sharedWith` contains me
 
-- [ ] Tests (users: Alice owns the recipe, Bob gets it shared, Carol is a stranger):
+- [x] Tests (users: Alice owns the recipe, Bob gets it shared, Carol is a stranger):
   - Alice shares with `BOB@example.com` → 200; `sharedWith` contains Bob
   - Bob: `scope=shared` lists it; `scope=mine` doesn't
   - Bob: GET → 200 with `isOwner: false` and **no** `sharedWith` field
@@ -552,20 +552,20 @@ Spec: §5 (sharing routes and rules 5–6). Branch: `feat/sharing`.
   - Alice shares with Bob twice → `sharedWith` has Bob once
   - Alice unshares Bob → Bob's GET → 404 and his shared list is empty
   - Alice deletes the recipe → Bob's shared list is empty
-- [ ] Implement with `$addToSet` / `$pull` inside the owner-scoped `findOneAndUpdate`.
-- [ ] Commit: `feat(recipes): add sharing`
+- [x] Implement with `$addToSet` / `$pull` inside the owner-scoped `findOneAndUpdate`.
+- [x] Commit: `feat(recipes): add sharing`
 
 ### Task 5.2: Client — tabs, share panel, read-only view
 
 **Files:** create `features/recipes/share-panel.ts`; modify the list and detail pages and `RecipesService`
 
-- [ ] List page: tabs "My recipes" / "Shared with me", synced with `?scope=` in the URL (so refresh and
+- [x] List page: tabs "My recipes" / "Shared with me", synced with `?scope=` in the URL (so refresh and
       the back button keep the tab). Shared items show "by <owner name>".
-- [ ] Detail page, when `isOwner`: share panel — email input + "Share" button, list of people with a
+- [x] Detail page, when `isOwner`: share panel — email input + "Share" button, list of people with a
       "Remove" button each, server errors shown inline. When not owner: "Shared by <name>", no
       edit/delete/share controls, scaling still works.
-- [ ] **Verify manually** with two browsers: everything in the 5.1 test list, through the UI.
-- [ ] Ship it.
+- [x] **Verify manually** with two browsers: everything in the 5.1 test list, through the UI.
+- [x] Ship it.
 
 ---
 

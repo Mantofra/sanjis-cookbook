@@ -6,9 +6,11 @@ import {
   deleteRecipe,
   getRecipe,
   listRecipes,
+  shareRecipe,
+  unshareRecipe,
   updateRecipe,
 } from './recipes.controller.js';
-import { recipeInputSchema, recipeUpdateSchema } from './recipes.schemas.js';
+import { recipeInputSchema, recipeShareSchema, recipeUpdateSchema } from './recipes.schemas.js';
 
 export function createRecipesRouter(): Router {
   const router = Router();
@@ -19,10 +21,12 @@ export function createRecipesRouter(): Router {
   router.get('/', listRecipes);
 
   router.post('/', validate(recipeInputSchema), createRecipe);
+  router.post('/:id/shares', validate(recipeShareSchema), shareRecipe);
 
   router.patch('/:id', validate(recipeUpdateSchema), updateRecipe);
 
   router.delete('/:id', deleteRecipe);
+  router.delete('/:id/shares/:userId', unshareRecipe);
 
   return router;
 }

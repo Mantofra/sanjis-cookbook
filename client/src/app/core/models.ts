@@ -10,6 +10,8 @@ export interface Ingredient {
   name: string;
 }
 
+export type RecipeScope = 'mine' | 'shared';
+
 export interface Recipe {
   id: string;
   title: string;

@@ -1,21 +1,46 @@
-<section class="recipe-detail">
-  <a class="recipe-detail__back" routerLink="/recipes">← Back to recipes</a>
+<article class="page">
+  <!-- Owned recipes live in "My recipes", everything else in "Shared with me". -->
+  <a
+    class="back"
+    routerLink="/recipes"
+    [queryParams]="recipe()?.isOwner === false ? { scope: 'shared' } : null"
+  >
+    ← {{ recipe()?.isOwner === false ? 'Shared with me' : 'My recipes' }}
+  </a>
 
   @if (loading()) {
-    <p class="recipe-detail__status">Loading…</p>
+    <p class="status">Loading recipe…</p>
   } @else if (notFound()) {
-    <p class="recipe-detail__status">Recipe not found.</p>
+    <div class="missing">
+      <h2 class="missing__title">This recipe isn't here</h2>
+      <p class="missing__text">It may have been deleted, or it hasn't been shared with you.</p>
+      <a class="btn" routerLink="/recipes">Go to my recipes</a>
+    </div>
   } @else if (error()) {
-    <p class="recipe-detail__status recipe-detail__status--error">{{ error() }}</p>
+    <p class="status status--error">{{ error() }}</p>
   } @else if (recipe(); as recipe) {
-    <header class="recipe-detail__header">
-      <div>
-        <h2 class="recipe-detail__title">{{ recipe.title }}</h2>
-        <p class="recipe-detail__owner">by {{ recipe.owner.displayName }}</p>
+    <header class="hero">
+      <div class="hero__text">
+        @if (!recipe.isOwner) {
+          <p class="hero__shared">Shared by {{ recipe.owner.displayName }}</p>
+        }
+        <h2 class="hero__title">{{ recipe.title }}</h2>
+
+        @if (recipe.description) {
+          <p class="hero__description">{{ recipe.description }}</p>
+        }
+
+        @if (recipe.tags.length) {
+          <ul class="tags hero__tags">
+            @for (tag of recipe.tags; track tag) {
+              <li class="tag">{{ tag }}</li>
+            }
+          </ul>
+        }
       </div>
 
       @if (recipe.isOwner) {
-        <div class="recipe-detail__actions">
+        <div class="hero__actions">
           <a class="btn" [routerLink]="['/recipes', recipe.id, 'edit']">Edit</a>
           <button
             type="button"
@@ -29,21 +54,9 @@
       }
     </header>
 
-    @if (recipe.tags.length) {
-      <ul class="recipe-detail__tags">
-        @for (tag of recipe.tags; track tag) {
-          <li class="tag">{{ tag }}</li>
-        }
-      </ul>
-    }
-
-    @if (recipe.description) {
-      <p class="recipe-detail__description">{{ recipe.description }}</p>
-    }
-
-    <dl class="recipe-detail__meta">
-      <div>
-        <dt><label for="servings">Servings</label></dt>
+    <dl class="facts">
+      <div class="facts__item facts__item--servings">
+        <dt><label for="servings">Serves</label></dt>
         <dd class="servings">
           <button
             type="button"
@@ -80,55 +93,61 @@
               class="servings__reset"
               (click)="chosenServings.set(recipe.servings)"
             >
-              reset
+              Back to {{ recipe.servings }}
             </button>
           }
         </dd>
       </div>
       @if (recipe.prepMinutes !== undefined) {
-        <div>
+        <div class="facts__item">
           <dt>Prep</dt>
           <dd>{{ recipe.prepMinutes }} min</dd>
         </div>
       }
       @if (recipe.cookMinutes !== undefined) {
-        <div>
+        <div class="facts__item">
           <dt>Cook</dt>
           <dd>{{ recipe.cookMinutes }} min</dd>
         </div>
       }
     </dl>
 
-    <div class="recipe-detail__body">
-      <section>
-        <h3>Ingredients</h3>
-        <ul class="recipe-detail__ingredients">
+    <div class="body">
+      <section class="ingredients" aria-labelledby="ingredients-title">
+        <h3 id="ingredients-title" class="section-title">Ingredients</h3>
+        <ul class="ingredients__list">
           @for (ingredient of scaledIngredients(); track $index) {
-            <li>
-              @if (ingredient.quantity !== undefined) {
-                <span class="qty">{{ ingredient.quantity | quantity }}</span>
-              }
-              @if (ingredient.unit) {
-                <span class="unit">{{ ingredient.unit }}</span>
-              }
-              <span>{{ ingredient.name }}</span>
+            <li class="ingredients__item">
+              <span class="ingredients__amount">
+                @if (ingredient.quantity !== undefined) {
+                  <span class="ingredients__qty">{{ ingredient.quantity | quantity }}</span>
+                }
+                @if (ingredient.unit) {
+                  <span class="ingredients__unit">{{ ingredient.unit }}</span>
+                }
+              </span>
+              <span class="ingredients__name">{{ ingredient.name }}</span>
             </li>
           } @empty {
-            <li class="recipe-detail__empty">No ingredients.</li>
+            <li class="muted">No ingredients listed.</li>
           }
         </ul>
       </section>
 
-      <section>
-        <h3>Steps</h3>
-        <ol class="recipe-detail__steps">
+      <section class="method" aria-labelledby="method-title">
+        <h3 id="method-title" class="section-title">Method</h3>
+        <ol class="method__steps">
           @for (step of recipe.steps; track $index) {
-            <li>{{ step }}</li>
+            <li class="method__step">{{ step }}</li>
           } @empty {
-            <li class="recipe-detail__empty">No steps.</li>
+            <li class="muted">No steps written yet.</li>
           }
         </ol>
       </section>
     </div>
+
+    @if (recipe.isOwner) {
+      <app-share-panel [recipe]="recipe" (recipeChange)="onRecipeChange($event)" />
+    }
   }
-</section>
+</article>

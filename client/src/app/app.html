@@ -1,9 +1,18 @@
-<header>
-  <h1>{{ title() }}</h1>
-  @if (auth.currentUser(); as user) {
-    <span>{{ user.displayName }}</span>
-    <button type="button" (click)="onLogout()">Logout</button>
-  }
+<header class="masthead">
+  <div class="masthead__inner">
+    <h1 class="masthead__brand">
+      <a routerLink="/recipes">{{ title() }}</a>
+    </h1>
+
+    @if (auth.currentUser(); as user) {
+      <div class="masthead__user">
+        <span class="masthead__name">{{ user.displayName }}</span>
+        <button type="button" class="masthead__logout" (click)="onLogout()">Log out</button>
+      </div>
+    }
+  </div>
 </header>
 
-<router-outlet />
+<main>
+  <router-outlet />
+</main>

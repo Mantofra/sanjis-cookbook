@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Recipe, RecipeInput } from '../../core/models';
+import { Recipe, RecipeInput, RecipeScope } from '../../core/models';
 
 @Service()
 export class RecipesService {
   private _http = inject(HttpClient);
   private _baseUrl = '/api/recipes';
 
-  list(scope: 'mine' | 'shared'): Observable<Recipe[]> {
+  list(scope: RecipeScope): Observable<Recipe[]> {
     return this._http.get<Recipe[]>(`${this._baseUrl}?scope=${scope}`);
   }
 
@@ -26,5 +26,13 @@ export class RecipesService {
 
   remove(id: string): Observable<void> {
     return this._http.delete<void>(`${this._baseUrl}/${id}`);
+  }
+
+  share(id: string, email: string): Observable<Recipe> {
+    return this._http.post<Recipe>(`${this._baseUrl}/${id}/shares`, { email });
+  }
+
+  unshare(id: string, userId: string): Observable<Recipe> {
+    return this._http.delete<Recipe>(`${this._baseUrl}/${id}/shares/${userId}`);
   }
 }

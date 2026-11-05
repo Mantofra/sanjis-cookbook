@@ -45,3 +45,7 @@ export interface RecipeDto {
 export const listRecipesQuerySchema = z.object({
   scope: z.enum(['mine', 'shared']).default('mine'),
 });
+
+export const recipeShareSchema = z.object({
+  email: z.email().toLowerCase(),
+});

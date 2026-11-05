@@ -1,9 +1,5 @@
-// Shared styles for the login and register pages.
-// Same palette and components as the recipe pages.
-$accent: #c2410c;
-$border: #e5e7eb;
-$muted: #6b7280;
-$danger: #b91c1c;
+// Layout shared by the login and register pages.
+// Buttons and fields come from the global styles.
 
 :host {
   display: block;
@@ -12,118 +8,53 @@ $danger: #b91c1c;
 .auth {
   display: flex;
   justify-content: center;
-  padding: 3rem 1rem;
+  padding: 3rem 1rem 4rem;
+
+  @media (min-width: 720px) {
+    padding-top: 5rem;
+  }
 
   &__card {
     width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    border: 1px solid $border;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    max-width: 420px;
+    padding: 2rem 1.5rem;
+    border: 2px solid var(--ink);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: 6px 6px 0 var(--saffron);
+
+    @media (min-width: 480px) {
+      padding: 2.25rem 2.25rem 2rem;
+    }
   }
 
   &__title {
-    margin: 0 0 1.5rem;
-    text-align: center;
+    margin-bottom: 0.4rem;
+    font-size: 2rem;
+  }
+
+  &__lede {
+    margin: 0 0 1.75rem;
+    color: var(--ink-soft);
+    font-family: var(--font-read);
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  &__submit {
+    margin-top: 0.5rem;
+    min-height: 2.9rem;
+    font-size: 1rem;
   }
 
   &__switch {
     margin: 1.5rem 0 0;
-    color: $muted;
-    font-size: 0.875rem;
+    color: var(--ink-soft);
     text-align: center;
 
     a {
-      color: $accent;
-      font-weight: 600;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      font-weight: 700;
+      text-underline-offset: 3px;
     }
-  }
-}
-
-input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.5rem 0.625rem;
-  border: 1px solid $border;
-  border-radius: 6px;
-  font: inherit;
-
-  &:focus {
-    outline: 2px solid rgba($accent, 0.3);
-    border-color: $accent;
-  }
-
-  &.ng-invalid.ng-touched {
-    border-color: $danger;
-  }
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-bottom: 1rem;
-
-  label {
-    font-weight: 600;
-    font-size: 0.875rem;
-  }
-
-  &__error {
-    margin: 0;
-    color: $danger;
-    font-size: 0.8rem;
-  }
-}
-
-.form-error {
-  margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  background: #fef2f2;
-  color: $danger;
-  font-size: 0.875rem;
-
-  p {
-    margin: 0;
-
-    & + p {
-      margin-top: 0.25rem;
-    }
-  }
-}
-
-.btn {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border: 1px solid $border;
-  border-radius: 6px;
-  background: #fff;
-  color: inherit;
-  font: inherit;
-  text-decoration: none;
-  cursor: pointer;
-
-  &--primary {
-    border-color: $accent;
-    background: $accent;
-    color: #fff;
-  }
-
-  &--block {
-    display: block;
-    width: 100%;
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
   }
 }
