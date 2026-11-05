@@ -468,7 +468,7 @@ owner: { id, displayName }, isOwner: boolean, sharedWith?: { id, email, displayN
       `null`) or the server will reject them. Show server `details` next to the fields.
 - [x] **Verify manually:** create, view, edit (add/remove rows), delete. As a second user (another browser
       or a private window), paste the first user's recipe URL → the app shows "not found".
-- [ ] Ship it (lint/format/test/build, PR, CI, merge, check production).
+- [x] Ship it (lint/format/test/build, PR, CI, merge, check production).
 
 ---
 
@@ -483,15 +483,15 @@ Spec: §7 "Servings scaling". Branch: `feat/scaling`. Client tests: run `npm tes
 
 **Interfaces — produces:** `scaleIngredients(ingredients: Ingredient[], baseServings: number, targetServings: number): Ingredient[]`
 
-- [ ] Tests:
+- [x] Tests:
   - 200 g for 4 → target 2 → 100 g
   - 1 for 3 → target 1 → quantity close to 0.3333 (`toBeCloseTo`)
   - ingredient without `quantity` → returned without `quantity`, everything else equal
   - unit and name never change
   - input array and its objects are not mutated (compare with a deep copy taken before)
   - target `0`, negative, non-integer or `NaN` → quantities unchanged (factor 1)
-- [ ] Implement: pure, no Angular imports.
-- [ ] Commit: `feat(client): add ingredient scaling function`
+- [x] Implement: pure, no Angular imports.
+- [x] Commit: `feat(client): add ingredient scaling function`
 
 ### Task 4.2: Quantity display pipe
 
@@ -508,22 +508,22 @@ Spec: §7 "Servings scaling". Branch: `feat/scaling`. Client tests: run `npm tes
    followed by that glyph.
 4. Otherwise show up to 2 decimals with trailing zeros removed.
 
-- [ ] Tests: `0.5 → '½'`, `2.25 → '2¼'`, `1.3333 → '1⅓'`, `0.6667 → '⅔'`, `3 → '3'`, `1.97 → '2'`,
+- [x] Tests: `0.5 → '½'`, `2.25 → '2¼'`, `1.3333 → '1⅓'`, `0.6667 → '⅔'`, `3 → '3'`, `1.97 → '2'`,
       `0.1 → '0.1'`, `1.15 → '1.15'`, `12.4 → '12'`, `undefined → ''`.
-- [ ] Implement.
-- [ ] Commit: `feat(client): add quantity display pipe`
+- [x] Implement.
+- [x] Commit: `feat(client): add quantity display pipe`
 
 ### Task 4.3: Servings control on the detail page
 
-- [ ] In the detail page: `chosenServings = signal(...)` initialized from the recipe;
+- [x] In the detail page: `chosenServings = signal(...)` initialized from the recipe;
       `scaledIngredients = computed(...)` using `scaleIngredients`; show quantities through the `quantity`
       pipe.
-- [ ] Control: − button, number input, + button. − is disabled at 1. If the input is empty or < 1, don't
+- [x] Control: − button, number input, + button. − is disabled at 1. If the input is empty or < 1, don't
       update `chosenServings` (keep the last valid value). A "reset" link appears when it differs from the
       recipe's servings.
-- [ ] **Verify manually:** 4 → 2 halves everything; 3 → 1 shows ⅓ where expected; clearing the input
+- [x] **Verify manually:** 4 → 2 halves everything; 3 → 1 shows ⅓ where expected; clearing the input
       never shows `NaN`; reload → back to the stored servings; nothing changed in the DB.
-- [ ] Ship it.
+- [x] Ship it.
 
 ---
 
