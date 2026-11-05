@@ -541,7 +541,7 @@ Spec: §5 (sharing routes and rules 5–6). Branch: `feat/sharing`.
 - `POST /api/recipes/:id/shares` `{ email }` → 200 + recipe; `DELETE /api/recipes/:id/shares/:userId` → 200 + recipe
 - `listRecipes(userId, 'shared')` now returns recipes where `sharedWith` contains me
 
-- [ ] Tests (users: Alice owns the recipe, Bob gets it shared, Carol is a stranger):
+- [x] Tests (users: Alice owns the recipe, Bob gets it shared, Carol is a stranger):
   - Alice shares with `BOB@example.com` → 200; `sharedWith` contains Bob
   - Bob: `scope=shared` lists it; `scope=mine` doesn't
   - Bob: GET → 200 with `isOwner: false` and **no** `sharedWith` field
@@ -552,8 +552,8 @@ Spec: §5 (sharing routes and rules 5–6). Branch: `feat/sharing`.
   - Alice shares with Bob twice → `sharedWith` has Bob once
   - Alice unshares Bob → Bob's GET → 404 and his shared list is empty
   - Alice deletes the recipe → Bob's shared list is empty
-- [ ] Implement with `$addToSet` / `$pull` inside the owner-scoped `findOneAndUpdate`.
-- [ ] Commit: `feat(recipes): add sharing`
+- [x] Implement with `$addToSet` / `$pull` inside the owner-scoped `findOneAndUpdate`.
+- [x] Commit: `feat(recipes): add sharing`
 
 ### Task 5.2: Client — tabs, share panel, read-only view
 

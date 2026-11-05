@@ -5,6 +5,7 @@ import { config } from '../../config.js';
 import { UserDocument, UserModel } from '../users/user.model.js';
 import { RegisterInput } from './auth.schemas.js';
 import { AppError } from '../../errors/app-error.js';
+import { Types } from 'mongoose';
 
 const cookieOptionS: CookieOptions = {
   httpOnly: true,
@@ -55,6 +56,12 @@ export class AuthService {
     const user = await UserModel.findById(userId);
     if (!user) throw new AppError(401, 'User not found');
     return user;
+  }
+
+  async getUserId(email: string): Promise<Types.ObjectId> {
+    const user = await UserModel.findOne({ email });
+    if (!user) throw new AppError(404, 'No user with that email');
+    return user._id;
   }
 }
 

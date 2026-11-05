@@ -32,3 +32,15 @@ export const deleteRecipe = async (req: Request<{ id: string }>, res: Response) 
   await recipesService.deleteRecipe(req.userId!, req.params.id);
   res.sendStatus(204);
 };
+
+export const shareRecipe = async (req: Request<{ id: string }>, res: Response) => {
+  const recipe = await recipesService.shareRecipe(req.userId!, req.params.id, req.body.email);
+  res.status(200).json(recipe);
+};
+export const unshareRecipe = async (
+  req: Request<{ id: string; userId: string }>,
+  res: Response,
+) => {
+  const recipe = await recipesService.unshareRecipe(req.userId!, req.params.id, req.params.userId);
+  res.status(200).json(recipe);
+};

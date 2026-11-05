@@ -1,4 +1,5 @@
 import { AppError } from '../../errors/app-error.js';
+import authService from '../auth/auth.service.js';
 import {
   OwnerRef,
   PopulatedRecipeDocument,
@@ -55,7 +56,10 @@ class RecipesService {
   }
 
   async getRecipe(userId: string, id: string): Promise<RecipeDto> {
-    const recipe = await RecipeModel.findOne({ _id: id, owner: userId }).populate<{
+    const recipe = await RecipeModel.findOne({
+      _id: id,
+      $or: [{ owner: userId }, { sharedWith: userId }],
+    }).populate<{
       owner: OwnerRef;
       sharedWith: SharedUserRef[];
     }>(RECIPE_POPULATE);
@@ -94,6 +98,40 @@ class RecipesService {
 
     if (!recipe) throw new AppError(404, 'Recipe not found');
     return;
+  }
+
+  async shareRecipe(ownerId: string, recipeId: string, email: string): Promise<RecipeDto> {
+    const targetUserId = await authService.getUserId(email);
+    if (targetUserId.toString() === ownerId) throw new AppError(400, 'Cannot share with owner');
+    const recipe = await RecipeModel.findOneAndUpdate(
+      { _id: recipeId, owner: ownerId },
+      { $addToSet: { sharedWith: targetUserId } },
+      {
+        returnDocument: 'after',
+        runValidators: true,
+      },
+    ).populate<{
+      owner: OwnerRef;
+      sharedWith: SharedUserRef[];
+    }>(RECIPE_POPULATE);
+    if (!recipe) throw new AppError(404, 'Recipe not found');
+    return this.toRecipeDto(recipe, ownerId);
+  }
+
+  async unshareRecipe(ownerId: string, recipeId: string, targetUserId: string): Promise<RecipeDto> {
+    const recipe = await RecipeModel.findOneAndUpdate(
+      { _id: recipeId, owner: ownerId },
+      { $pull: { sharedWith: targetUserId } },
+      {
+        returnDocument: 'after',
+        runValidators: true,
+      },
+    ).populate<{
+      owner: OwnerRef;
+      sharedWith: SharedUserRef[];
+    }>(RECIPE_POPULATE);
+    if (!recipe) throw new AppError(404, 'Recipe not found');
+    return this.toRecipeDto(recipe, ownerId);
   }
 }
 
