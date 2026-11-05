@@ -508,10 +508,10 @@ Spec: §7 "Servings scaling". Branch: `feat/scaling`. Client tests: run `npm tes
    followed by that glyph.
 4. Otherwise show up to 2 decimals with trailing zeros removed.
 
-- [ ] Tests: `0.5 → '½'`, `2.25 → '2¼'`, `1.3333 → '1⅓'`, `0.6667 → '⅔'`, `3 → '3'`, `1.97 → '2'`,
+- [x] Tests: `0.5 → '½'`, `2.25 → '2¼'`, `1.3333 → '1⅓'`, `0.6667 → '⅔'`, `3 → '3'`, `1.97 → '2'`,
       `0.1 → '0.1'`, `1.15 → '1.15'`, `12.4 → '12'`, `undefined → ''`.
-- [ ] Implement.
-- [ ] Commit: `feat(client): add quantity display pipe`
+- [x] Implement.
+- [x] Commit: `feat(client): add quantity display pipe`
 
 ### Task 4.3: Servings control on the detail page
 
