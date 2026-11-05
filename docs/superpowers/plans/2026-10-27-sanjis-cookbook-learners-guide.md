@@ -575,7 +575,7 @@ Branch: `chore/polish`.
 
 ### Task 6.1: Pre-commit hook
 
-- [ ] Root: `npm install -D husky lint-staged`, run `npx husky init`.
+- [x] Root: `npm install -D husky lint-staged`, run `npx husky init`.
 - [ ] `lint-staged` config: run `prettier --write` on staged files, and `eslint --fix` on staged `.ts`
       and `.html` files.
 - [ ] Pre-commit hook runs `npx lint-staged`.
