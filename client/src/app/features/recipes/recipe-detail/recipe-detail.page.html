@@ -62,7 +62,9 @@
             min="1"
             step="1"
             [value]="chosenServings()"
-            (input)="servingsInput.valueAsNumber >= 1 && chosenServings.set(servingsInput.valueAsNumber)"
+            (input)="
+              servingsInput.valueAsNumber >= 1 && chosenServings.set(servingsInput.valueAsNumber)
+            "
           />
           <button
             type="button"
