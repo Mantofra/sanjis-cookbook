@@ -5,9 +5,10 @@ import { Recipe } from '../../../core/models';
 import { QuantityPipe } from '../../../shared/quantity.pipe';
 import { RecipesService } from '../recipes.service';
 import { scaleIngredients } from '../scaling/scaling';
+import { SharePanel } from '../share-panel';
 
 @Component({
-  imports: [RouterLink, QuantityPipe],
+  imports: [RouterLink, QuantityPipe, SharePanel],
   selector: 'app-recipe-detail',
   styleUrl: './recipe-detail.page.scss',
   templateUrl: './recipe-detail.page.html',
@@ -33,6 +34,11 @@ export class RecipeDetailPage implements OnInit {
 
   ngOnInit(): void {
     this._getRecipe();
+  }
+
+  /** The share panel returns the updated recipe; keep the chosen servings as they are. */
+  public onRecipeChange(recipe: Recipe): void {
+    this.recipe.set(recipe);
   }
 
   public onDelete(): void {

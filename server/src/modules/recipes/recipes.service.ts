@@ -101,6 +101,9 @@ class RecipesService {
   }
 
   async shareRecipe(ownerId: string, recipeId: string, email: string): Promise<RecipeDto> {
+    // Check ownership before looking up the email, so non-owners can't probe which emails exist.
+    if (!(await RecipeModel.exists({ _id: recipeId, owner: ownerId })))
+      throw new AppError(404, 'Recipe not found');
     const targetUserId = await authService.getUserId(email);
     if (targetUserId.toString() === ownerId) throw new AppError(400, 'Cannot share with owner');
     const recipe = await RecipeModel.findOneAndUpdate(

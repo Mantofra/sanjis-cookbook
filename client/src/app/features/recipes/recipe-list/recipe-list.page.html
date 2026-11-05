@@ -1,37 +1,78 @@
-<section class="recipe-list">
-  <header class="recipe-list__header">
-    <h2>My recipes</h2>
+<section class="page">
+  <header class="list-head">
+    <nav class="tabs" aria-label="Recipe lists">
+      <a
+        class="tabs__tab"
+        routerLink="/recipes"
+        [class.tabs__tab--active]="activeScope() === 'mine'"
+        [attr.aria-current]="activeScope() === 'mine' ? 'page' : null"
+      >
+        My recipes
+      </a>
+      <a
+        class="tabs__tab"
+        routerLink="/recipes"
+        [queryParams]="{ scope: 'shared' }"
+        [class.tabs__tab--active]="activeScope() === 'shared'"
+        [attr.aria-current]="activeScope() === 'shared' ? 'page' : null"
+      >
+        Shared with me
+      </a>
+    </nav>
+
     <a class="btn btn--primary" routerLink="/recipes/new">New recipe</a>
   </header>
 
   @if (loading()) {
-    <p class="recipe-list__status">Loading…</p>
+    <p class="status">Loading recipes…</p>
   } @else if (error()) {
-    <p class="recipe-list__status recipe-list__status--error">{{ error() }}</p>
+    <p class="status status--error">{{ error() }}</p>
   } @else {
-    <ul class="recipe-list__items">
+    <ul class="grid">
       @for (recipe of recipes(); track recipe.id) {
-        <li class="recipe-card">
-          <a class="recipe-card__link" [routerLink]="['/recipes', recipe.id]">
-            <h3 class="recipe-card__title">{{ recipe.title }}</h3>
+        <li>
+          <a class="card" [routerLink]="['/recipes', recipe.id]">
+            <h3 class="card__title">{{ recipe.title }}</h3>
 
-            @if (recipe.tags.length) {
-              <ul class="recipe-card__tags">
-                @for (tag of recipe.tags; track tag) {
-                  <li class="tag">{{ tag }}</li>
+            @if (!recipe.isOwner) {
+              <p class="card__owner">by {{ recipe.owner.displayName }}</p>
+            }
+
+            @if (recipe.description) {
+              <p class="card__description">{{ recipe.description }}</p>
+            }
+
+            <div class="card__foot">
+              @if (recipe.tags.length) {
+                <ul class="tags">
+                  @for (tag of recipe.tags; track tag) {
+                    <li class="tag">{{ tag }}</li>
+                  }
+                </ul>
+              }
+
+              <p class="card__facts">
+                <span>Serves {{ recipe.servings }}</span>
+                @if (recipe.prepMinutes || recipe.cookMinutes) {
+                  <span>{{ (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0) }} min</span>
                 }
-              </ul>
-            }
-
-            @if (recipe.prepMinutes || recipe.cookMinutes) {
-              <p class="recipe-card__time">
-                {{ (recipe.prepMinutes ?? 0) + (recipe.cookMinutes ?? 0) }} min total
               </p>
-            }
+            </div>
           </a>
         </li>
       } @empty {
-        <li class="recipe-list__empty">No recipes yet</li>
+        <li class="empty">
+          @if (activeScope() === 'shared') {
+            <h3 class="empty__title">Nothing shared with you yet</h3>
+            <p class="empty__text">
+              When a friend shares a recipe with your email, it shows up here.
+            </p>
+          } @else {
+            <h3 class="empty__title">Your cookbook is empty</h3>
+            <p class="empty__text">Write down the first dish you know by heart.</p>
+            <a class="btn btn--primary" routerLink="/recipes/new">Add a recipe</a>
+          }
+        </li>
       }
     </ul>
   }

@@ -1,6 +1,9 @@
 <section class="auth">
   <div class="auth__card">
-    <h2 class="auth__title">Register</h2>
+    <h2 class="auth__title">Start your cookbook</h2>
+    <p class="auth__lede">
+      Keep your recipes in one place and share them with the people you cook for.
+    </p>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="field">
@@ -54,13 +57,13 @@
 
       <button
         type="submit"
-        class="btn btn--primary btn--block"
+        class="btn btn--primary btn--block auth__submit"
         [disabled]="form.invalid || submitting()"
       >
-        Register
+        Create account
       </button>
     </form>
 
-    <p class="auth__switch">Already have an account? <a routerLink="/login">Login</a></p>
+    <p class="auth__switch">Already have an account? <a routerLink="/login">Log in</a></p>
   </div>
 </section>

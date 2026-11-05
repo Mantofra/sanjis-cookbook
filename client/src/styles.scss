@@ -1,1 +1,293 @@
-/* You can add global styles to this file, and also import other style files */
+// Global tokens and base components shared by every page.
+// Page styles only handle their own layout.
+
+:root {
+  --paprika: #c4361b;
+  --paprika-deep: #9c2611;
+  --saffron: #f5b524;
+  --saffron-soft: #ffe1a0;
+  --butter: #fff1d0;
+  --surface: #fffaf0;
+  --ink: #2a1711;
+  --ink-soft: #6e4d3e;
+  --line: #e7cfa6;
+  --basil: #2f6b3e;
+  --basil-soft: #e1eedb;
+  --danger: #b3200e;
+  --danger-soft: #fde3dc;
+
+  --font-ui: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-read: 'Figtree', system-ui, sans-serif;
+
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--butter);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--paprika);
+}
+
+:focus-visible {
+  outline: 3px solid var(--saffron);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--saffron-soft);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Page frame */
+.page {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+
+  @media (min-width: 720px) {
+    padding: 2.5rem 1.5rem 5rem;
+  }
+}
+
+.status {
+  margin: 2rem 0;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+
+  &--error {
+    color: var(--danger);
+  }
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 1.15rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 0.95rem/1 var(--font-ui);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.15s var(--ease),
+    box-shadow 0.15s var(--ease),
+    background-color 0.15s var(--ease);
+
+  &:hover:not(:disabled) {
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+
+  &:active:not(:disabled) {
+    box-shadow: none;
+    transform: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    border-color: var(--paprika);
+    background: var(--paprika);
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+  }
+
+  &--danger {
+    border-color: var(--danger);
+    color: var(--danger);
+
+    &:hover:not(:disabled) {
+      background: var(--danger);
+      color: #fff;
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+  }
+
+  &--quiet {
+    border-color: transparent;
+    background: transparent;
+    color: var(--ink-soft);
+
+    &:hover:not(:disabled) {
+      box-shadow: none;
+      transform: none;
+      color: var(--danger);
+      background: var(--danger-soft);
+    }
+  }
+
+  &--block {
+    display: flex;
+    width: 100%;
+  }
+}
+
+/* Form fields. :where() keeps specificity at zero so page styles can override freely. */
+:where(input:not([type='checkbox'], [type='radio']), textarea) {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  transition:
+    border-color 0.15s var(--ease),
+    box-shadow 0.15s var(--ease);
+
+  &::placeholder {
+    color: #b0927f;
+  }
+
+  &:focus {
+    border-color: var(--ink);
+    box-shadow: 3px 3px 0 var(--saffron);
+    outline: none;
+  }
+
+  &.ng-invalid.ng-touched {
+    border-color: var(--danger);
+  }
+}
+
+textarea {
+  resize: vertical;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem;
+
+  > label {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  &__hint {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+
+  &__error {
+    margin: 0;
+    color: var(--danger);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+}
+
+.form-error {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--danger);
+  border-radius: var(--radius-sm);
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-weight: 600;
+
+  p {
+    margin: 0;
+  }
+
+  p + p {
+    margin-top: 0.25rem;
+  }
+}
+
+/* Tags */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tag {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--saffron-soft);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* "Back to …" link at the top of a page */
+.back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: var(--ink-soft);
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--paprika);
+  }
+}

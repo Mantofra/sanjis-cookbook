@@ -47,7 +47,14 @@ export class RecipeFormPage implements OnInit {
     if (!id) return;
 
     this._recipesSrv.get(id).subscribe({
-      next: (recipe) => this._fillForm(recipe),
+      next: (recipe) => {
+        // GET also returns recipes shared with us, but only the owner may edit them.
+        if (!recipe.isOwner) {
+          this._router.navigate(['/recipes', recipe.id]);
+          return;
+        }
+        this._fillForm(recipe);
+      },
       error: (err: HttpErrorResponse) =>
         this.serverError.set(err.error?.error?.message ?? 'Could not load recipe'),
     });

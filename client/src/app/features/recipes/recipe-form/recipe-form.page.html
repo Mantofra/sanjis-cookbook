@@ -1,97 +1,122 @@
-<section class="recipe-form">
-  <h2>{{ isEdit() ? 'Edit recipe' : 'New recipe' }}</h2>
+<section class="page form-page">
+  <a class="back" [routerLink]="isEdit() ? ['/recipes', id()] : ['/recipes']">
+    ← {{ isEdit() ? 'Back to recipe' : 'My recipes' }}
+  </a>
+
+  <h2 class="form-page__title">{{ isEdit() ? 'Edit recipe' : 'New recipe' }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <!-- Title -->
-    <div class="field">
-      <label for="title">Title *</label>
-      <input id="title" type="text" formControlName="title" maxlength="120" />
-      @if (form.controls.title.touched && form.controls.title.hasError('required')) {
-        <p class="field__error">Title is required.</p>
-      }
-      @for (msg of serverDetails()['title']; track msg) {
-        <p class="field__error">{{ msg }}</p>
-      }
-    </div>
-
-    <!-- Description -->
-    <div class="field">
-      <label for="description">Description</label>
-      <textarea id="description" rows="3" formControlName="description" maxlength="2000"></textarea>
-      @for (msg of serverDetails()['description']; track msg) {
-        <p class="field__error">{{ msg }}</p>
-      }
-    </div>
-
-    <!-- Servings / times -->
-    <div class="field-row">
+    <div class="sheet">
       <div class="field">
-        <label for="servings">Servings *</label>
-        <input id="servings" type="number" min="1" step="1" formControlName="servings" />
-        @if (form.controls.servings.touched && form.controls.servings.invalid) {
-          <p class="field__error">At least 1 serving.</p>
+        <label for="title">Title</label>
+        <input
+          id="title"
+          type="text"
+          formControlName="title"
+          maxlength="120"
+          placeholder="Grandma's lasagne"
+        />
+        @if (form.controls.title.touched && form.controls.title.hasError('required')) {
+          <p class="field__error">Give the recipe a title.</p>
         }
-        @for (msg of serverDetails()['servings']; track msg) {
+        @for (msg of serverDetails()['title']; track msg) {
           <p class="field__error">{{ msg }}</p>
         }
       </div>
 
       <div class="field">
-        <label for="prepMinutes">Prep (min)</label>
-        <input id="prepMinutes" type="number" min="0" step="1" formControlName="prepMinutes" />
-        @for (msg of serverDetails()['prepMinutes']; track msg) {
+        <label for="description">Description <span class="optional">optional</span></label>
+        <textarea
+          id="description"
+          rows="3"
+          formControlName="description"
+          maxlength="2000"
+          placeholder="Where it comes from, when you make it, what to serve it with."
+        ></textarea>
+        @for (msg of serverDetails()['description']; track msg) {
           <p class="field__error">{{ msg }}</p>
         }
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="servings">Servings</label>
+          <input id="servings" type="number" min="1" step="1" formControlName="servings" />
+          @if (form.controls.servings.touched && form.controls.servings.invalid) {
+            <p class="field__error">At least 1 serving.</p>
+          }
+          @for (msg of serverDetails()['servings']; track msg) {
+            <p class="field__error">{{ msg }}</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="prepMinutes">Prep, min <span class="optional">optional</span></label>
+          <input id="prepMinutes" type="number" min="0" step="1" formControlName="prepMinutes" />
+          @for (msg of serverDetails()['prepMinutes']; track msg) {
+            <p class="field__error">{{ msg }}</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="cookMinutes">Cook, min <span class="optional">optional</span></label>
+          <input id="cookMinutes" type="number" min="0" step="1" formControlName="cookMinutes" />
+          @for (msg of serverDetails()['cookMinutes']; track msg) {
+            <p class="field__error">{{ msg }}</p>
+          }
+        </div>
       </div>
 
       <div class="field">
-        <label for="cookMinutes">Cook (min)</label>
-        <input id="cookMinutes" type="number" min="0" step="1" formControlName="cookMinutes" />
-        @for (msg of serverDetails()['cookMinutes']; track msg) {
+        <label for="tags">Tags <span class="optional">optional</span></label>
+        <input
+          id="tags"
+          type="text"
+          formControlName="tags"
+          placeholder="pasta, vegetarian, quick"
+        />
+        <p class="field__hint">Separate tags with commas.</p>
+        @for (msg of serverDetails()['tags']; track msg) {
           <p class="field__error">{{ msg }}</p>
         }
       </div>
     </div>
 
-    <!-- Tags -->
-    <div class="field">
-      <label for="tags">Tags</label>
-      <input id="tags" type="text" formControlName="tags" placeholder="pasta, vegetarian, quick" />
-      <p class="field__hint">Comma-separated.</p>
-      @for (msg of serverDetails()['tags']; track msg) {
-        <p class="field__error">{{ msg }}</p>
-      }
-    </div>
+    <fieldset class="sheet group" formArrayName="ingredients">
+      <legend class="group__title">Ingredients</legend>
 
-    <!-- Ingredients -->
-    <fieldset class="group" formArrayName="ingredients">
-      <legend>Ingredients</legend>
+      @if (ingredients.length) {
+        <div class="group__labels" aria-hidden="true">
+          <span>Qty</span><span>Unit</span><span>Ingredient</span>
+        </div>
+      }
 
       @for (ingredient of ingredients.controls; track ingredient; let i = $index) {
-        <div class="group__row group__row--ingredient" [formGroupName]="i">
+        <div class="row row--ingredient" [formGroupName]="i">
           <input
             type="number"
             min="0"
             step="any"
             formControlName="quantity"
-            placeholder="Qty"
+            placeholder="200"
             [attr.aria-label]="'Ingredient ' + (i + 1) + ' quantity'"
           />
           <input
             type="text"
             formControlName="unit"
-            placeholder="Unit"
+            placeholder="g"
             [attr.aria-label]="'Ingredient ' + (i + 1) + ' unit'"
           />
           <input
             type="text"
+            class="row__name"
             formControlName="name"
-            placeholder="Name *"
+            placeholder="spaghetti"
             [attr.aria-label]="'Ingredient ' + (i + 1) + ' name'"
           />
           <button
             type="button"
-            class="btn btn--icon"
+            class="btn btn--quiet row__remove"
             (click)="removeIngredient(i)"
             [attr.aria-label]="'Remove ingredient ' + (i + 1)"
           >
@@ -106,20 +131,26 @@
         <p class="field__error">{{ msg }}</p>
       }
 
-      <button type="button" class="btn" (click)="addIngredient()">+ Add ingredient</button>
+      <button type="button" class="btn group__add" (click)="addIngredient()">
+        + Add ingredient
+      </button>
     </fieldset>
 
-    <!-- Steps -->
-    <fieldset class="group" formArrayName="steps">
-      <legend>Steps</legend>
+    <fieldset class="sheet group" formArrayName="steps">
+      <legend class="group__title">Method</legend>
 
       @for (step of steps.controls; track step; let i = $index) {
-        <div class="group__row group__row--step">
-          <span class="group__index">{{ i + 1 }}.</span>
-          <textarea rows="2" [formControlName]="i" [attr.aria-label]="'Step ' + (i + 1)"></textarea>
+        <div class="row row--step">
+          <span class="row__index" aria-hidden="true">{{ i + 1 }}</span>
+          <textarea
+            rows="2"
+            [formControlName]="i"
+            [attr.aria-label]="'Step ' + (i + 1)"
+            placeholder="Describe this step."
+          ></textarea>
           <button
             type="button"
-            class="btn btn--icon"
+            class="btn btn--quiet row__remove"
             (click)="removeStep(i)"
             [attr.aria-label]="'Remove step ' + (i + 1)"
           >
@@ -134,7 +165,7 @@
         <p class="field__error">{{ msg }}</p>
       }
 
-      <button type="button" class="btn" (click)="addStep()">+ Add step</button>
+      <button type="button" class="btn group__add" (click)="addStep()">+ Add step</button>
     </fieldset>
 
     @if (serverError()) {
