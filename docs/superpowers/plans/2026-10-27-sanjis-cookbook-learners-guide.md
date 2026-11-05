@@ -576,18 +576,18 @@ Branch: `chore/polish`.
 ### Task 6.1: Pre-commit hook
 
 - [x] Root: `npm install -D husky lint-staged`, run `npx husky init`.
-- [ ] `lint-staged` config: run `prettier --write` on staged files, and `eslint --fix` on staged `.ts`
+- [x] `lint-staged` config: run `prettier --write` on staged files, and `eslint --fix` on staged `.ts`
       and `.html` files.
-- [ ] Pre-commit hook runs `npx lint-staged`.
-- [ ] **Verify:** stage a badly formatted file → commit → it gets formatted; stage a file with a lint
+- [x] Pre-commit hook runs `npx lint-staged`.
+- [x] **Verify:** stage a badly formatted file → commit → it gets formatted; stage a file with a lint
       error → the commit is blocked.
 
 ### Task 6.2: UX states and README
 
-- [ ] Every page that loads data shows a loading state, an error state and (for lists) an empty state.
-- [ ] `README.md`: what the app is, the live URL, how to run locally (`.env` from `.env.example`,
+- [x] Every page that loads data shows a loading state, an error state and (for lists) an empty state.
+- [x] `README.md`: what the app is, the live URL, how to run locally (`.env` from `.env.example`,
       `npm install`, `npm run dev`), the available scripts, how deployment works.
-- [ ] Ship it. 🎉
+- [x] Ship it. 🎉
 
 ---
 
