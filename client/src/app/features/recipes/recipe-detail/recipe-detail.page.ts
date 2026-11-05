@@ -1,11 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Recipe } from '../../../core/models';
+import { QuantityPipe } from '../../../shared/quantity.pipe';
 import { RecipesService } from '../recipes.service';
+import { scaleIngredients } from '../scaling/scaling';
 
 @Component({
-  imports: [RouterLink],
+  imports: [RouterLink, QuantityPipe],
   selector: 'app-recipe-detail',
   styleUrl: './recipe-detail.page.scss',
   templateUrl: './recipe-detail.page.html',
@@ -22,6 +24,12 @@ export class RecipeDetailPage implements OnInit {
   notFound = signal<boolean>(false);
   error = signal<string | null>(null);
   deleting = signal<boolean>(false);
+  chosenServings = signal<number>(1);
+  scaledIngredients = computed(() => {
+    const recipe = this.recipe();
+    if (!recipe) return [];
+    return scaleIngredients(recipe.ingredients, recipe.servings, this.chosenServings());
+  });
 
   ngOnInit(): void {
     this._getRecipe();
@@ -46,6 +54,7 @@ export class RecipeDetailPage implements OnInit {
       next: (recipe) => {
         this.loading.set(false);
         this.recipe.set(recipe);
+        this.chosenServings.set(recipe.servings);
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);

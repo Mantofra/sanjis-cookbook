@@ -43,8 +43,45 @@
 
     <dl class="recipe-detail__meta">
       <div>
-        <dt>Servings</dt>
-        <dd>{{ recipe.servings }}</dd>
+        <dt><label for="servings">Servings</label></dt>
+        <dd class="servings">
+          <button
+            type="button"
+            class="servings__step"
+            aria-label="Fewer servings"
+            [disabled]="chosenServings() <= 1"
+            (click)="chosenServings.set(chosenServings() - 1)"
+          >
+            −
+          </button>
+          <input
+            #servingsInput
+            id="servings"
+            class="servings__input"
+            type="number"
+            min="1"
+            step="1"
+            [value]="chosenServings()"
+            (input)="servingsInput.valueAsNumber >= 1 && chosenServings.set(servingsInput.valueAsNumber)"
+          />
+          <button
+            type="button"
+            class="servings__step"
+            aria-label="More servings"
+            (click)="chosenServings.set(chosenServings() + 1)"
+          >
+            +
+          </button>
+          @if (chosenServings() !== recipe.servings) {
+            <button
+              type="button"
+              class="servings__reset"
+              (click)="chosenServings.set(recipe.servings)"
+            >
+              reset
+            </button>
+          }
+        </dd>
       </div>
       @if (recipe.prepMinutes !== undefined) {
         <div>
@@ -64,10 +101,10 @@
       <section>
         <h3>Ingredients</h3>
         <ul class="recipe-detail__ingredients">
-          @for (ingredient of recipe.ingredients; track $index) {
+          @for (ingredient of scaledIngredients(); track $index) {
             <li>
               @if (ingredient.quantity !== undefined) {
-                <span class="qty">{{ ingredient.quantity }}</span>
+                <span class="qty">{{ ingredient.quantity | quantity }}</span>
               }
               @if (ingredient.unit) {
                 <span class="unit">{{ ingredient.unit }}</span>

@@ -515,15 +515,15 @@ Spec: §7 "Servings scaling". Branch: `feat/scaling`. Client tests: run `npm tes
 
 ### Task 4.3: Servings control on the detail page
 
-- [ ] In the detail page: `chosenServings = signal(...)` initialized from the recipe;
+- [x] In the detail page: `chosenServings = signal(...)` initialized from the recipe;
       `scaledIngredients = computed(...)` using `scaleIngredients`; show quantities through the `quantity`
       pipe.
-- [ ] Control: − button, number input, + button. − is disabled at 1. If the input is empty or < 1, don't
+- [x] Control: − button, number input, + button. − is disabled at 1. If the input is empty or < 1, don't
       update `chosenServings` (keep the last valid value). A "reset" link appears when it differs from the
       recipe's servings.
-- [ ] **Verify manually:** 4 → 2 halves everything; 3 → 1 shows ⅓ where expected; clearing the input
+- [x] **Verify manually:** 4 → 2 halves everything; 3 → 1 shows ⅓ where expected; clearing the input
       never shows `NaN`; reload → back to the stored servings; nothing changed in the DB.
-- [ ] Ship it.
+- [x] Ship it.
 
 ---
 
