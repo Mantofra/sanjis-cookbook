@@ -19,6 +19,9 @@ export class RecipeFormPage implements OnInit {
   serverError = signal<string | null>(null);
   serverDetails = signal<Record<string, string[]>>({});
   submitting = signal(false);
+  // Edit mode only: the form stays hidden until the recipe is in, so a blank form can never be saved over it.
+  loading = signal(false);
+  loadError = signal<string | null>(null);
 
   // Bound from the ':id' route param via withComponentInputBinding() — the name must match.
   id = input<string>();
@@ -46,6 +49,7 @@ export class RecipeFormPage implements OnInit {
     const id = this.id();
     if (!id) return;
 
+    this.loading.set(true);
     this._recipesSrv.get(id).subscribe({
       next: (recipe) => {
         // GET also returns recipes shared with us, but only the owner may edit them.
@@ -54,9 +58,12 @@ export class RecipeFormPage implements OnInit {
           return;
         }
         this._fillForm(recipe);
+        this.loading.set(false);
       },
-      error: (err: HttpErrorResponse) =>
-        this.serverError.set(err.error?.error?.message ?? 'Could not load recipe'),
+      error: (err: HttpErrorResponse) => {
+        this.loading.set(false);
+        this.loadError.set(err.error?.error?.message ?? 'Could not load recipe');
+      },
     });
   }
 

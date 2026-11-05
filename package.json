@@ -16,7 +16,15 @@
     "lint": "eslint .",
     "test": "npm test --workspaces --if-present",
     "build": "npm run build -w client && npm run build -w server",
-    "start": "npm start -w server"
+    "start": "npm start -w server",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,html}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "!(*.ts|*.html)": "prettier --write --ignore-unknown"
   },
   "repository": {
     "type": "git",
@@ -36,6 +44,8 @@
     "concurrently": "^10.0.6",
     "eslint": "^10.13.0",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
     "typescript-eslint": "^8.72.1"
   }
