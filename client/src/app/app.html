@@ -1,7 +1,10 @@
 <header class="masthead">
   <div class="masthead__inner">
     <h1 class="masthead__brand">
-      <a routerLink="/recipes">{{ title() }}</a>
+      <a routerLink="/recipes">
+        <img class="masthead__logo" src="favicon.svg" alt="" width="48" height="48" />
+        <span>{{ title() }}</span>
+      </a>
     </h1>
 
     @if (auth.currentUser(); as user) {

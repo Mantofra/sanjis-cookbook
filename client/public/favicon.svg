@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <title>Sanji's Cookbook</title>
+  <defs>
+    <!-- Noodle strands, reused for drawing and for cutting gaps in the bowl -->
+    <g id="drape">
+      <path d="M18 29.5 C14.5 29.5 13 33 13.5 37.5 C14 41.5 11.5 43.5 12.8 48"/>
+      <path d="M22.5 28.5 C19.5 29.5 18.5 33.5 19 38 C19.4 41.5 17.8 43 18.3 45.5"/>
+    </g>
+    <mask id="cut" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#fff"/>
+      <use href="#drape" stroke="#000" stroke-width="5.5"/>
+      <!-- rim band and foot separation -->
+      <path d="M12.5 36.8 Q32 31.2 52 36.8" stroke="#000" stroke-width="1.6"/>
+      <path d="M21 52.6 Q32 54.2 43 52.6" stroke="#000" stroke-width="1.6"/>
+    </mask>
+  </defs>
+
+  <g fill="#000">
+    <!-- Bowl seen slightly from below: near rim bulges upward, foot shows its underside -->
+    <g mask="url(#cut)">
+      <path d="M7 34.5 Q32 26.5 57 34.5 C56 45 49.5 51.5 42 53 Q32 54.6 22 53 C14.5 51.5 8 45 7 34.5 Z"/>
+      <path d="M22.5 53 L21.5 57.5 Q32 61 42.5 57.5 L41.5 53 Z"/>
+    </g>
+  </g>
+
+  <g stroke="#000">
+    <!-- Noodles lifted out of the bowl -->
+    <g stroke-width="2.2">
+      <path d="M26 31 C23.5 27 28.5 24 26 20 C24 17 27 15.5 28.5 13.5"/>
+      <path d="M30.5 30 C28 26 33 23 30.5 19 C29 16.5 30.5 15.5 31.5 15"/>
+      <path d="M35 30.5 C32.5 26.5 37.5 23.5 35 19.5 C33.8 17.5 34.2 16.8 35 16.5"/>
+      <path d="M39 31 C37 28 41 25.5 39.5 22.5 C38.5 20.5 37.5 19 36.5 17.5"/>
+    </g>
+    <!-- Noodles spilling over the rim -->
+    <use href="#drape" stroke-width="2.2"/>
+    <!-- Chopsticks -->
+    <path d="M27.5 13 L59 3.5" stroke-width="2.8"/>
+    <path d="M32 16.5 L61 10" stroke-width="2.8"/>
+  </g>
+</svg>
