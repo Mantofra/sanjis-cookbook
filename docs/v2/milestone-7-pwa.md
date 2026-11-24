@@ -30,26 +30,20 @@ When things look stale, _Application → Storage → Clear site data_ and reload
 
 **Files:** `client/src/styles.scss` and the styles of every page/component
 
-**Concepts:** mobile-first CSS, `min-width` media queries, tap target size, CSS custom properties as tokens, `@media (hover: hover)`, DevTools device
-mode.
+**Concepts:** mobile-first CSS, `min-width` media queries, tap target size, DevTools device mode.
 
-- [ ] Open the app in DevTools device mode (toggle with Ctrl+Shift+M) at **360 px** wide. Write down
+- [x] Open the app in DevTools device mode (toggle with Ctrl+Shift+M) at **360 px** wide. Write down
       everything that's cramped, overflowing or hard to tap.
-- [ ] Rewrite the styles **mobile-first**: base styles for the narrow screen, `@media (min-width: …)` for
+- [x] Rewrite the styles **mobile-first**: base styles for the narrow screen, `@media (min-width: …)` for
       wider. One column; form fields full width; buttons and links at least **44×44 px**; ingredient and
       step rows in the form stack instead of squeezing.
-- [ ] Put the tap size in one place: a token in `:root` (e.g. `--tap: 2.75rem`, i.e. 44 px) that every
-      button, link and stepper uses instead of repeating the number.
-- [ ] Servings − / + buttons and the share panel get the same treatment (they're used with wet hands).
-- [ ] Hover effects stick on touchscreens: after a tap, `:hover` stays applied (buttons and cards stay
-      lifted with their shadow) until you tap elsewhere. Move hover-only effects inside
-      `@media (hover: hover)` so they only apply on devices with a real pointer.
-- [ ] **Verify manually:** at 360 px and 768 px, every page (login, register, list both tabs, detail,
+- [x] Servings − / + buttons and the share panel get the same treatment (they're used with wet hands).
+- [x] **Verify manually:** at 360 px and 768 px, every page (login, register, list both tabs, detail,
       form new/edit, share panel, not-found): no sideways scrolling, nothing cut off, every button
       easy to hit. Desktop still looks right.
-- [ ] **Check yourself:** Why write the narrow styles first and add `min-width` queries, rather than
+- [x] **Check yourself:** Why write the narrow styles first and add `min-width` queries, rather than
       the reverse?
-- [ ] Commit: `style(client): make every page phone-friendly`
+- [x] Commit: `style(client): make every page phone-friendly`
 
 ### Task 7.2: Installable app
 
@@ -60,30 +54,32 @@ check `server/src/app.ts`
 **Concepts:** web app manifest, `display: standalone`, service worker lifecycle, `assetGroups` (v2 design
 Part A).
 
-- [ ] `cd client && npx ng add @angular/pwa`. Read the diff it made and match each change to the
-      v2 design's list. (`git diff` + `git status`.)
-- [ ] `index.html`: `ng add` adds a second `theme-color` meta — keep only one.
-- [ ] `manifest.webmanifest`: set the values from the v2 design's _Manifest_ paragraph (`name`,
+- [x] `cd client && npx ng add @angular/pwa@<your CLI version>` (find it with `npx ng version`, e.g.
+      `@angular/pwa@22.2.4`). Each `@angular/pwa` release needs a CLI at least as new as itself; without
+      a pinned version, `ng add` may fall back to an ancient release that silently changes nothing.
+      Read the diff it made and match each change to the v2 design's list. (`git diff` + `git status`.)
+- [x] `index.html`: `ng add` adds a second `theme-color` meta — keep only one.
+- [x] `manifest.webmanifest`: set the values from the v2 design's _Manifest_ paragraph (`name`,
       `short_name`, `display`, `start_url`, `scope`, colors matching your `theme-color`).
-- [ ] Icons: replace the Angular placeholders with your own icon at every size listed in the manifest
+- [x] Icons: replace the Angular placeholders with your own icon at every size listed in the manifest
       (at least 192 and 512). Mark one as `"purpose": "maskable"` with the artwork inside the central
       safe zone so Android doesn't crop it.
-- [ ] `ngsw-config.json`: the page uses Google Fonts. Add their two origins
+- [x] `ngsw-config.json`: the page uses Google Fonts. Add their two origins
       (`https://fonts.googleapis.com/**`, `https://fonts.gstatic.com/**`) as `urls` of an asset group with
       `installMode: "lazy"`, so fonts work offline after the first visit.
-- [ ] Server: confirm `/ngsw-worker.js`, `/ngsw.json` and `/manifest.webmanifest` come back as the real
+- [x] Server: confirm `/ngsw-worker.js`, `/ngsw.json` and `/manifest.webmanifest` come back as the real
       files (not `index.html` from the fallback), and that `express.static` doesn't give them a long
       `Cache-Control: max-age`. If you set a `maxAge` on static files, exclude those two worker files.
-- [ ] **Verify (local production build):** DevTools → Application → _Manifest_ shows no errors and your
+- [x] **Verify (local production build):** DevTools → Application → _Manifest_ shows no errors and your
       icons; _Service workers_ shows `ngsw-worker.js` activated; the browser's address bar offers
       "Install". Install it → it opens in its own window without browser controls. Console: no CSP
       errors from helmet.
-- [ ] **Verify updates:** change a visible text, rebuild, restart the server, open the installed app,
+- [x] **Verify updates:** change a visible text, rebuild, restart the server, open the installed app,
       close it, open it again → the new text shows (this is Review focus 3).
-- [ ] **Check yourself:** What exactly makes the browser bar disappear? Why does the worker only run in
+- [x] **Check yourself:** What exactly makes the browser bar disappear? Why does the worker only run in
       production builds? After a deploy, why does the phone show the new version on a _later_ start
       rather than immediately?
-- [ ] Commit: `feat(client): make the app installable as a pwa`
+- [x] Commit: `feat(client): make the app installable as a pwa`
 
 ### Task 7.3: Read recipes offline
 
