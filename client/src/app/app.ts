@@ -13,11 +13,13 @@ export class App {
   protected readonly title = signal("Sanji's Cookbook");
   private _router = inject(Router);
   public auth = inject(AuthService);
+  public logoutError = signal<string | null>(null);
 
   public onLogout(): void {
+    this.logoutError.set(null);
     this.auth.logout().subscribe({
       next: () => this._router.navigateByUrl('/login'),
-      error: (err) => errorMessage(err),
+      error: (err) => this.logoutError.set(errorMessage(err)),
     });
   }
 }
