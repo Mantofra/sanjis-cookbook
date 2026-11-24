@@ -670,7 +670,8 @@ something that already works end to end.
 
 ### v2 and later
 
-- **v2 — Photos**: one cover photo per recipe, uploaded to Cloudinary (an image hosting service); MongoDB
+- **v2** is designed in `docs/superpowers/specs/2026-11-24-v2-design.md` (Part A: installable phone app).
+- **Photos**: one cover photo per recipe, uploaded to Cloudinary (an image hosting service); MongoDB
   stores only the image URL. Gets its own design when we get there.
 - Later ideas: copy a shared recipe into your own collection, password reset by email, edit permission for
   shared users, unit conversion.
