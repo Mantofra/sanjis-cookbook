@@ -17,6 +17,9 @@
 
   &__tab {
     position: relative;
+    display: inline-flex;
+    align-items: flex-end;
+    min-height: var(--tap);
     padding: 0.25rem 0 0.4rem;
     color: var(--ink-soft);
     font-size: clamp(1.35rem, 3.5vw, 1.85rem);
@@ -41,8 +44,10 @@
       transition: transform 0.25s var(--ease);
     }
 
-    &:hover {
-      color: var(--ink);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--ink);
+      }
     }
 
     &--active {
@@ -57,7 +62,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
   gap: 1.25rem;
   margin: 0;
   padding: 0;
@@ -79,10 +84,16 @@
     transform 0.18s var(--ease),
     box-shadow 0.18s var(--ease);
 
-  &:hover,
   &:focus-visible {
     box-shadow: 5px 5px 0 var(--paprika);
     transform: translate(-3px, -3px);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: 5px 5px 0 var(--paprika);
+      transform: translate(-3px, -3px);
+    }
   }
 
   &__title {
@@ -118,7 +129,8 @@
 
   &__facts {
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
     margin: 0;
     padding-top: 0.75rem;
     border-top: 2px dashed var(--line);

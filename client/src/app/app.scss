@@ -34,14 +34,17 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
+      min-height: var(--tap);
       color: inherit;
       text-decoration: none;
 
-      &:hover {
-        color: var(--saffron-soft);
+      @media (hover: hover) {
+        &:hover {
+          color: var(--saffron-soft);
 
-        .masthead__logo {
-          transform: rotate(-6deg);
+          .masthead__logo {
+            transform: rotate(-6deg);
+          }
         }
       }
     }
@@ -66,7 +69,9 @@
   }
 
   &__logout {
-    padding: 0.4rem 0.9rem;
+    min-height: var(--tap);
+    padding: 0.4rem 1.1rem;
+    white-space: nowrap;
     border: 2px solid #fff;
     border-radius: 999px;
     background: transparent;
@@ -77,9 +82,11 @@
       background-color 0.15s var(--ease),
       color 0.15s var(--ease);
 
-    &:hover {
-      background: #fff;
-      color: var(--paprika-deep);
+    @media (hover: hover) {
+      &:hover {
+        background: #fff;
+        color: var(--paprika-deep);
+      }
     }
   }
 }

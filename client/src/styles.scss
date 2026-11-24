@@ -24,6 +24,9 @@
   --radius-sm: 8px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
+  // Smallest comfortable touch target (44 px).
+  --tap: 2.75rem;
+
   color-scheme: light;
 }
 
@@ -107,7 +110,7 @@ a {
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  min-height: 2.5rem;
+  min-height: var(--tap);
   padding: 0.5rem 1.15rem;
   border: 2px solid var(--ink);
   border-radius: 999px;
@@ -121,9 +124,12 @@ a {
     box-shadow 0.15s var(--ease),
     background-color 0.15s var(--ease);
 
-  &:hover:not(:disabled) {
-    box-shadow: 3px 3px 0 var(--ink);
-    transform: translate(-2px, -2px);
+  // Touchscreens keep :hover after a tap, so the lift only applies with a real pointer.
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      box-shadow: 3px 3px 0 var(--ink);
+      transform: translate(-2px, -2px);
+    }
   }
 
   &:active:not(:disabled) {
@@ -140,20 +146,17 @@ a {
     border-color: var(--paprika);
     background: var(--paprika);
     color: #fff;
-
-    &:hover:not(:disabled) {
-      box-shadow: 3px 3px 0 var(--ink);
-    }
   }
 
   &--danger {
     border-color: var(--danger);
     color: var(--danger);
 
-    &:hover:not(:disabled) {
-      background: var(--danger);
-      color: #fff;
-      box-shadow: 3px 3px 0 var(--ink);
+    @media (hover: hover) {
+      &:hover:not(:disabled) {
+        background: var(--danger);
+        color: #fff;
+      }
     }
   }
 
@@ -162,11 +165,13 @@ a {
     background: transparent;
     color: var(--ink-soft);
 
-    &:hover:not(:disabled) {
-      box-shadow: none;
-      transform: none;
-      color: var(--danger);
-      background: var(--danger-soft);
+    @media (hover: hover) {
+      &:hover:not(:disabled) {
+        box-shadow: none;
+        transform: none;
+        color: var(--danger);
+        background: var(--danger-soft);
+      }
     }
   }
 
@@ -281,13 +286,17 @@ textarea {
 
 /* "Back to …" link at the top of a page */
 .back {
-  display: inline-block;
-  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  margin-bottom: 1rem;
   color: var(--ink-soft);
   font-weight: 600;
   text-decoration: none;
 
-  &:hover {
-    color: var(--paprika);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--paprika);
+    }
   }
 }

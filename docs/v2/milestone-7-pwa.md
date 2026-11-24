@@ -30,14 +30,20 @@ When things look stale, _Application → Storage → Clear site data_ and reload
 
 **Files:** `client/src/styles.scss` and the styles of every page/component
 
-**Concepts:** mobile-first CSS, `min-width` media queries, tap target size, DevTools device mode.
+**Concepts:** mobile-first CSS, `min-width` media queries, tap target size, CSS custom properties as tokens, `@media (hover: hover)`, DevTools device
+mode.
 
 - [ ] Open the app in DevTools device mode (toggle with Ctrl+Shift+M) at **360 px** wide. Write down
       everything that's cramped, overflowing or hard to tap.
 - [ ] Rewrite the styles **mobile-first**: base styles for the narrow screen, `@media (min-width: …)` for
       wider. One column; form fields full width; buttons and links at least **44×44 px**; ingredient and
       step rows in the form stack instead of squeezing.
+- [ ] Put the tap size in one place: a token in `:root` (e.g. `--tap: 2.75rem`, i.e. 44 px) that every
+      button, link and stepper uses instead of repeating the number.
 - [ ] Servings − / + buttons and the share panel get the same treatment (they're used with wet hands).
+- [ ] Hover effects stick on touchscreens: after a tap, `:hover` stays applied (buttons and cards stay
+      lifted with their shadow) until you tap elsewhere. Move hover-only effects inside
+      `@media (hover: hover)` so they only apply on devices with a real pointer.
 - [ ] **Verify manually:** at 360 px and 768 px, every page (login, register, list both tabs, detail,
       form new/edit, share panel, not-found): no sideways scrolling, nothing cut off, every button
       easy to hit. Desktop still looks right.
