@@ -12,6 +12,9 @@
         <span class="masthead__name">{{ user.displayName }}</span>
         <button type="button" class="masthead__logout" (click)="onLogout()">Log out</button>
       </div>
+      @if (logoutError(); as error) {
+        <p class="masthead__error" role="alert">{{ error }}</p>
+      }
     }
   </div>
 </header>

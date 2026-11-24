@@ -54,8 +54,10 @@ check `server/src/app.ts`
 **Concepts:** web app manifest, `display: standalone`, service worker lifecycle, `assetGroups` (v2 design
 Part A).
 
-- [x] `cd client && npx ng add @angular/pwa`. Read the diff it made and match each change to the
-      v2 design's list. (`git diff` + `git status`.)
+- [x] `cd client && npx ng add @angular/pwa@<your CLI version>` (find it with `npx ng version`, e.g.
+      `@angular/pwa@22.2.4`). Each `@angular/pwa` release needs a CLI at least as new as itself; without
+      a pinned version, `ng add` may fall back to an ancient release that silently changes nothing.
+      Read the diff it made and match each change to the v2 design's list. (`git diff` + `git status`.)
 - [x] `index.html`: `ng add` adds a second `theme-color` meta — keep only one.
 - [x] `manifest.webmanifest`: set the values from the v2 design's _Manifest_ paragraph (`name`,
       `short_name`, `display`, `start_url`, `scope`, colors matching your `theme-color`).
