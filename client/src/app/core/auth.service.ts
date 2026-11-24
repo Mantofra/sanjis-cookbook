@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { catchError, finalize, firstValueFrom, map, Observable, of, tap } from 'rxjs';
+import { catchError, concatMap, firstValueFrom, from, map, Observable, of, tap } from 'rxjs';
 import { User } from './models';
+import { clearOfflineData } from './offline-cache';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -23,21 +24,23 @@ export class AuthService {
   }
 
   public register(email: string, password: string, displayName: string): Observable<User> {
-    return this._http
-      .post<User>('/api/auth/register', { email, password, displayName })
-      .pipe(tap((user) => this._currentUser.set(user)));
+    return this._http.post<User>('/api/auth/register', { email, password, displayName }).pipe(
+      concatMap((user) => from(clearOfflineData()).pipe(map(() => user))),
+      tap((user) => this._currentUser.set(user)),
+    );
   }
 
   public login(email: string, password: string): Observable<User> {
-    return this._http
-      .post<User>('/api/auth/login', { email, password })
-      .pipe(tap((user) => this._currentUser.set(user)));
+    return this._http.post<User>('/api/auth/login', { email, password }).pipe(
+      concatMap((user) => from(clearOfflineData()).pipe(map(() => user))),
+      tap((user) => this._currentUser.set(user)),
+    );
   }
 
   public logout(): Observable<void> {
     return this._http
       .post<void>('/api/auth/logout', {})
-      .pipe(finalize(() => this._currentUser.set(null)));
+      .pipe(concatMap(() => from(clearOfflineData()).pipe(tap(() => this._currentUser.set(null)))));
   }
 
   public clearUser(): void {

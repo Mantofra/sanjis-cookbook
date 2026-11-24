@@ -54,10 +54,8 @@ check `server/src/app.ts`
 **Concepts:** web app manifest, `display: standalone`, service worker lifecycle, `assetGroups` (v2 design
 Part A).
 
-- [x] `cd client && npx ng add @angular/pwa@<your CLI version>` (find it with `npx ng version`, e.g.
-      `@angular/pwa@22.2.4`). Each `@angular/pwa` release needs a CLI at least as new as itself; without
-      a pinned version, `ng add` may fall back to an ancient release that silently changes nothing.
-      Read the diff it made and match each change to the v2 design's list. (`git diff` + `git status`.)
+- [x] `cd client && npx ng add @angular/pwa`. Read the diff it made and match each change to the
+      v2 design's list. (`git diff` + `git status`.)
 - [x] `index.html`: `ng add` adds a second `theme-color` meta — keep only one.
 - [x] `manifest.webmanifest`: set the values from the v2 design's _Manifest_ paragraph (`name`,
       `short_name`, `display`, `start_url`, `scope`, colors matching your `theme-color`).
@@ -125,20 +123,20 @@ Part A).
 - Consumes: the `api-read` data group name (7.3); `AuthService.login/register/logout` (2.5)
 - Produces: `clearOfflineData(): Promise<void>` in `core/offline-cache.ts`
 
-- [ ] Implement `clearOfflineData`: if `'caches' in window` is false, resolve immediately. Otherwise
+- [x] Implement `clearOfflineData`: if `'caches' in window` is false, resolve immediately. Otherwise
       `caches.keys()`, and delete every key that starts with `ngsw:` and contains `:api-read:` (look at
       the real key names in DevTools → Cache Storage first, to confirm the pattern). Never throws: a
       failure is logged and ignored.
-- [ ] In `AuthService`: call it after a **successful** `logout`, `login` and `register`, before
+- [x] In `AuthService`: call it after a **successful** `logout`, `login` and `register`, before
       `currentUser` changes. (Hint: it returns a Promise and these return Observables — `from(...)` and
       `switchMap`/`concatMap` connect them.)
-- [ ] **Verify (Review focus 2):** as user A, open a recipe and copy its URL; check Cache Storage has the
+- [x] **Verify (Review focus 2):** as user A, open a recipe and copy its URL; check Cache Storage has the
       `api-read` entries. Log out → those entries are gone. Log in as B, go Offline, paste A's URL → the
       offline message, never A's recipe.
-- [ ] **Ship it:** lint/format/test/build, PR, CI green, merge, wait for Render.
-- [ ] **On your phone** (production URL, real HTTPS):
+- [x] **Ship it:** lint/format/test/build, PR, CI green, merge, wait for Render.
+- [x] **On your phone** (production URL, real HTTPS):
   - Android/Chrome: menu → _Install app_. iPhone/Safari: Share → _Add to Home Screen_.
   - Open from the icon → full-screen, no browser bar, your icon and name.
   - Open a few recipes, turn on airplane mode, close and reopen the app → recipes readable.
   - Turn airplane mode off, deploy a small visible change, open the app twice → the change shows.
-- [ ] Commit (if anything changed during phone testing): `fix(client): …`. 🎉
+- [x] Commit (if anything changed during phone testing): `fix(client): …`. 🎉
