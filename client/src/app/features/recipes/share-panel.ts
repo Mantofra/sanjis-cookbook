@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Observable } from 'rxjs';
 import { Recipe } from '../../core/models';
 import { RecipesService } from './recipes.service';
+import { errorMessage } from '../../shared/error-message';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -207,7 +208,7 @@ export class SharePanel {
       },
       error: (err: HttpErrorResponse) => {
         this.busy.set(false);
-        this.error.set(err.error?.error?.message ?? 'Something went wrong');
+        this.error.set(errorMessage(err));
       },
     });
   }

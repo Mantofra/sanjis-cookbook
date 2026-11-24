@@ -93,28 +93,28 @@ Part A).
 
 **Concepts:** `dataGroups`, `freshness` vs `performance`, `HttpErrorResponse.status === 0`.
 
-- [ ] `ngsw-config.json`: add the `api-read` data group exactly as the v2 design's _Data caching_
+- [x] `ngsw-config.json`: add the `api-read` data group exactly as the v2 design's _Data caching_
       paragraph says (`urls`, `strategy`, `timeout`, `maxAge`, `maxSize`). Login, logout and register are
       **not** in it.
-- [ ] Tests for `errorMessage` (write them first, watch them fail):
+- [x] Tests for `errorMessage` (write them first, watch them fail):
   - `HttpErrorResponse` with `status: 0` → `"You're offline — this needs a connection."`
   - status 404 with body `{ error: { message: 'Recipe not found' } }` → `'Recipe not found'`
   - status 500 with no usable body → `'Something went wrong. Please try again.'`
   - a value that isn't an `HttpErrorResponse` (e.g. `new Error('x')`, `undefined`) → the same generic
     message
-- [ ] Implement `errorMessage`: pure, no injection.
-- [ ] Use `errorMessage` everywhere a page shows an HTTP error (login, register, form, detail delete, share
+- [x] Implement `errorMessage`: pure, no injection.
+- [x] Use `errorMessage` everywhere a page shows an HTTP error (login, register, form, detail delete, share
       panel, list). Validation `details` on 400 still show next to the fields as before.
-- [ ] **Verify (local production build):** log in, open the list (both tabs) and two recipes. DevTools →
+- [x] **Verify (local production build):** log in, open the list (both tabs) and two recipes. DevTools →
       Application → Service workers → tick **Offline** → reload: the list and those two recipes show; a
       recipe you never opened shows the offline message; saving an edit shows the offline message.
-- [ ] **Verify the cold start (Review focus 1):** still offline, close the tab/app and open it again →
+- [x] **Verify the cold start (Review focus 1):** still offline, close the tab/app and open it again →
       you land on `/recipes`, logged in, not on `/login`. If you get `/login`, check that `/api/auth/me`
       is in the group's `urls` and look in _Cache Storage_ for it.
-- [ ] Untick Offline, edit a recipe, reload → the new version shows (freshness = network first).
-- [ ] **Check yourself:** Why `freshness` and not `performance` here? Why would `POST /api/recipes`
+- [x] Untick Offline, edit a recipe, reload → the new version shows (freshness = network first).
+- [x] **Check yourself:** Why `freshness` and not `performance` here? Why would `POST /api/recipes`
       never be served from the cache?
-- [ ] Commit: `feat(client): read already opened recipes offline`
+- [x] Commit: `feat(client): read already opened recipes offline`
 
 ### Task 7.4: Clear saved data when the user changes, then ship
 

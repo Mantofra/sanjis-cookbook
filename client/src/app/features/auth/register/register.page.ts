@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../core/auth.service';
+import { errorMessage } from '../../../shared/error-message';
 
 @Component({
   selector: 'app-register',
@@ -43,7 +44,7 @@ export class RegisterPage implements OnInit {
         next: () => this.router.navigateByUrl('/recipes'),
         error: (err: HttpErrorResponse) => {
           this.submitting.set(false);
-          this.serverError.set(err.error?.error?.message ?? 'Something went wrong');
+          this.serverError.set(errorMessage(err));
           if (err.status === 400) {
             this.serverDetails.set(
               Object.values(err.error?.error?.details ?? {}).flat() as string[],

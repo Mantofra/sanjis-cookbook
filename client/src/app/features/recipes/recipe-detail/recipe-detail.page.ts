@@ -6,6 +6,7 @@ import { QuantityPipe } from '../../../shared/quantity.pipe';
 import { RecipesService } from '../recipes.service';
 import { scaleIngredients } from '../scaling/scaling';
 import { SharePanel } from '../share-panel';
+import { errorMessage } from '../../../shared/error-message';
 
 @Component({
   imports: [RouterLink, QuantityPipe, SharePanel],
@@ -50,7 +51,7 @@ export class RecipeDetailPage implements OnInit {
       next: () => this._router.navigateByUrl('/recipes'),
       error: (err: HttpErrorResponse) => {
         this.deleting.set(false);
-        this.error.set(err.error?.error?.message ?? 'Could not delete the recipe');
+        this.error.set(errorMessage(err));
       },
     });
   }
@@ -67,7 +68,7 @@ export class RecipeDetailPage implements OnInit {
         if (err.status === 404) {
           this.notFound.set(true);
         } else {
-          this.error.set(err.error?.error?.message ?? 'Something went wrong');
+          this.error.set(errorMessage(err));
         }
       },
     });

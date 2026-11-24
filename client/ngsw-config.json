@@ -32,5 +32,17 @@
         "urls": ["https://fonts.googleapis.com/**", "https://fonts.gstatic.com/**"]
       }
     }
+  ],
+  "dataGroups": [
+    {
+      "name": "api-read",
+      "urls": ["/api/recipes", "/api/recipes/**", "/api/auth/me"],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "timeout": "3s",
+        "maxAge": "30d",
+        "maxSize": 200
+      }
+    }
   ]
 }
