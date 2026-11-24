@@ -1,7 +1,7 @@
 # Sanji's Cookbook — v2 Design
 
 v2 collects improvements decided after v1's design. Each part below was discussed and approved on its own.
-v2 starts only after v1 (milestones 0–6) is shipped. The learner's guide gets one milestone per part.
+v2 starts only after v1 (milestones 0–6) is shipped. Each part gets its own guide file in this folder (Part A → `milestone-7-pwa.md`).
 
 ---
 
