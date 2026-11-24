@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { catchError, of, switchMap, tap } from 'rxjs';
 import { Recipe, RecipeScope } from '../../../core/models';
 import { RecipesService } from '../recipes.service';
+import { errorMessage } from '../../../shared/error-message';
 
 @Component({
   imports: [RouterLink],
@@ -37,7 +38,7 @@ export class RecipeListPage implements OnInit {
           this._recipesService.list(scope).pipe(
             // Handle errors inside so one failed request doesn't kill the tab subscription.
             catchError((err: HttpErrorResponse) => {
-              this.error.set(err.error?.error?.message ?? 'Something went wrong');
+              this.error.set(errorMessage(err));
               return of<Recipe[]>([]);
             }),
           ),

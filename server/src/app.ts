@@ -27,7 +27,18 @@ export function createApp() {
     app.set('trust proxy', 1);
   }
 
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          // The service worker downloads Google Fonts with fetch() to cache them for offline use.
+          // A worker obeys the CSP sent with ngsw-worker.js itself, and helmet's default
+          // (connect-src falls back to default-src 'self') would block those requests.
+          connectSrc: ["'self'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com'],
+        },
+      },
+    }),
+  );
   app.use(express.json({ limit: '100kb' }));
   app.use(cookieParser());
 

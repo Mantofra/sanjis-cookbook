@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { RecipesService } from '../recipes.service';
 import { Ingredient, Recipe, RecipeInput } from '../../../core/models';
+import { errorMessage } from '../../../shared/error-message';
 
 @Component({
   imports: [ReactiveFormsModule, RouterModule],
@@ -62,7 +63,7 @@ export class RecipeFormPage implements OnInit {
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
-        this.loadError.set(err.error?.error?.message ?? 'Could not load recipe');
+        this.loadError.set(errorMessage(err));
       },
     });
   }
@@ -145,7 +146,7 @@ export class RecipeFormPage implements OnInit {
       next: (recipe) => this._router.navigate(['/recipes', recipe.id]),
       error: (err: HttpErrorResponse) => {
         this.submitting.set(false);
-        this.serverError.set(err.error?.error?.message ?? 'Something went wrong');
+        this.serverError.set(errorMessage(err));
         if (err.status === 400) {
           this.serverDetails.set(err.error?.error?.details ?? {});
         }

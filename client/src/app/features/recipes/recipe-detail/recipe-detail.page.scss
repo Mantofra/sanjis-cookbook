@@ -69,6 +69,7 @@
 
   &__actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
   }
 }
@@ -83,24 +84,31 @@
   background: var(--surface);
   overflow: hidden;
 
+  // Phones: servings on its own row, prep and cook share the row below.
   &__item {
-    flex: 0 0 auto;
-    padding: 0.85rem 1.5rem;
+    flex: 1 1 auto;
+    padding: 0.85rem 1.25rem;
     border-right: 2px solid var(--line);
 
     &:last-child {
       border-right: 0;
     }
 
+    @media (min-width: 560px) {
+      flex: 0 0 auto;
+      padding-inline: 1.5rem;
+    }
+
     &--servings {
-      flex: 1 1 auto;
+      flex-basis: 100%;
+      border-right: 0;
+      border-bottom: 2px solid var(--line);
       background: var(--saffron-soft);
 
-      // On phones the servings control gets its own row.
-      @media (max-width: 559px) {
-        flex-basis: 100%;
-        border-right: 0;
-        border-bottom: 2px solid var(--line);
+      @media (min-width: 560px) {
+        flex: 1 1 auto;
+        border-right: 2px solid var(--line);
+        border-bottom: 0;
       }
     }
   }
@@ -125,8 +133,9 @@
   gap: 0.4rem;
 
   &__step {
-    width: 2.25rem;
-    height: 2.25rem;
+    flex: none;
+    width: var(--tap);
+    height: var(--tap);
     border: 2px solid var(--ink);
     border-radius: 50%;
     background: var(--surface);
@@ -137,9 +146,11 @@
       background-color 0.15s var(--ease),
       color 0.15s var(--ease);
 
-    &:hover:not(:disabled) {
-      background: var(--ink);
-      color: var(--surface);
+    @media (hover: hover) {
+      &:hover:not(:disabled) {
+        background: var(--ink);
+        color: var(--surface);
+      }
     }
 
     &:disabled {
@@ -149,8 +160,8 @@
   }
 
   &__input {
-    width: 3.75rem;
-    height: 2.25rem;
+    width: 4rem;
+    height: var(--tap);
     border: 2px solid var(--ink);
     border-radius: var(--radius-sm);
     background: #fff;
@@ -172,8 +183,8 @@
   }
 
   &__reset {
-    margin-left: 0.4rem;
-    padding: 0;
+    min-height: var(--tap);
+    padding: 0 0.5rem;
     border: 0;
     background: none;
     color: var(--paprika-deep);

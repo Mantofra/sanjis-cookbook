@@ -53,6 +53,9 @@
     text-align: center;
 
     a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
       font-weight: 700;
       text-underline-offset: 3px;
     }

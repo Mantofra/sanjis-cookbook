@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Observable } from 'rxjs';
 import { Recipe } from '../../core/models';
 import { RecipesService } from './recipes.service';
+import { errorMessage } from '../../shared/error-message';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -64,10 +65,14 @@ import { RecipesService } from './recipes.service';
 
     .share {
       max-width: 40rem;
-      padding: 1.75rem 1.5rem 1.25rem;
+      padding: 1.5rem 1.25rem 1rem;
       border: 2px solid var(--ink);
       border-radius: var(--radius-lg);
       background: var(--basil-soft);
+
+      @media (min-width: 560px) {
+        padding: 1.75rem 1.5rem 1.25rem;
+      }
 
       &__title {
         font-size: 1.5rem;
@@ -80,14 +85,19 @@ import { RecipesService } from './recipes.service';
         font-size: 1.05rem;
       }
 
+      // Phones: input and button stacked, both full width.
       &__form {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 0.5rem;
+
+        @media (min-width: 560px) {
+          flex-direction: row;
+        }
       }
 
       &__input {
-        flex: 1 1 14rem;
+        flex: 1 1 auto;
         min-width: 0;
       }
 
@@ -198,7 +208,7 @@ export class SharePanel {
       },
       error: (err: HttpErrorResponse) => {
         this.busy.set(false);
-        this.error.set(err.error?.error?.message ?? 'Something went wrong');
+        this.error.set(errorMessage(err));
       },
     });
   }

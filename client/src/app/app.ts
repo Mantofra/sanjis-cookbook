@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './core/auth.service';
+import { errorMessage } from './shared/error-message';
 
 @Component({
   imports: [RouterOutlet, RouterLink],
@@ -16,7 +17,7 @@ export class App {
   public onLogout(): void {
     this.auth.logout().subscribe({
       next: () => this._router.navigateByUrl('/login'),
-      error: () => this._router.navigateByUrl('/login'),
+      error: (err) => errorMessage(err),
     });
   }
 }
